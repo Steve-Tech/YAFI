@@ -21,13 +21,17 @@ class YAFI(Adw.Application):
             content.remove(content_child)
         content.append(page)
 
-    def _update_thermals(self, fan_rpm, temp_items):
+    def _update_thermals(self, fan_rpm, temp_items, fan_rpm_target):
         ec_fans = ec_commands.memmap.get_fans(self.cros_ec)
         fan_rpm.set_subtitle(f"{ec_fans[0]} RPM")
 
         ec_temp_sensors = ec_commands.memmap.get_temps(self.cros_ec)
-        for i, item in enumerate(temp_items):
-            item.set_subtitle(f"{ec_temp_sensors[i]}°C")
+        # The temp sensors disappear sometimes, so we need to handle that
+        for i in range(min(len(temp_items), len(ec_temp_sensors))):
+            temp_items[i].set_subtitle(f"{ec_temp_sensors[i]}°C")
+
+        ec_target_rpm = ec_commands.pwm.pwm_get_fan_rpm(self.cros_ec)
+        fan_rpm_target.set_subtitle(f"{ec_target_rpm} RPM")
 
         return self.current_page == 0
 
@@ -85,10 +89,10 @@ class YAFI(Adw.Application):
             temperatures.append(new_row)
             temp_items.append(new_row)
 
-        self._update_thermals(fan_rpm, temp_items)
+        self._update_thermals(fan_rpm, temp_items, fan_set_rpm)
 
         # Schedule _update_thermals to run every second
-        GLib.timeout_add_seconds(1, self._update_thermals, fan_rpm, temp_items)
+        GLib.timeout_add_seconds(1, self._update_thermals, fan_rpm, temp_items, fan_set_rpm)
 
     def _leds_page(self, builder):
         # Load the leds.ui file
