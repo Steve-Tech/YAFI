@@ -69,6 +69,16 @@ class YAFI(Adw.Application):
 
         self._change_page(builder, leds_root)
 
+    def _battery_page(self, builder):
+        # Load the battery.ui file
+        battery_builder = Gtk.Builder()
+        battery_builder.add_from_file("battery.ui")
+
+        # Get the root widget from the battery.ui file
+        battery_root = battery_builder.get_object("battery-root")
+
+        self._change_page(builder, battery_root)
+
 
     def on_activate(self, app):
         # Create a Builder
@@ -77,7 +87,7 @@ class YAFI(Adw.Application):
 
         self._thermals_page(builder)
 
-        pages = (("Thermals", self._thermals_page), ("LEDs", self._leds_page), ("Battery", self._leds_page), ("About", self._leds_page))
+        pages = (("Thermals", self._thermals_page), ("LEDs", self._leds_page), ("Battery", self._battery_page), ("Hardware", self._leds_page), ("About", self._leds_page))
 
         # Build the navbar
         navbar = builder.get_object("navbar")

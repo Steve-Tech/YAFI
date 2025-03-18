@@ -1,0 +1,168 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!-- Created with Cambalache 0.94.1 -->
+<interface>
+  <!-- interface-description The Battery page for YAFI -->
+  <!-- interface-authors Steve-Tech -->
+  <requires lib="gtk" version="4.0"/>
+  <requires lib="libadwaita" version="1.6"/>
+  <object class="GtkBox" id="battery-root">
+    <property name="orientation">vertical</property>
+    <child>
+      <object class="GtkListBox">
+        <property name="margin-end">10</property>
+        <property name="margin-start">10</property>
+        <child>
+          <object class="AdwActionRow">
+            <property name="selectable">False</property>
+            <property name="title">Battery Limiters</property>
+          </object>
+        </child>
+        <child>
+          <object class="AdwActionRow" id="bat-limit">
+            <property name="subtitle">Limit the maximum charge</property>
+            <property name="title">Charge Limit</property>
+            <child>
+              <object class="GtkBox">
+                <child>
+                  <object class="GtkScale" id="bat-limit-scale">
+                    <property name="adjustment">
+                      <object class="GtkAdjustment">
+                        <property name="page-increment">10.0</property>
+                        <property name="step-increment">1.0</property>
+                        <property name="upper">100.0</property>
+                        <property name="value">100.0</property>
+                      </object>
+                    </property>
+                    <property name="hexpand">True</property>
+                    <property name="round-digits">0</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="AdwPreferencesGroup">
+            <property name="description">Preserve the battery lifespan by gradually lowering battery charge voltage automatically if the system is connected to AC for more than the set day limit.</property>
+            <property name="margin-bottom">5</property>
+            <property name="margin-end">5</property>
+            <property name="margin-start">5</property>
+            <property name="margin-top">5</property>
+            <property name="title">Battery Extender</property>
+            <child>
+              <object class="AdwSwitchRow">
+                <property name="title">Enable</property>
+              </object>
+            </child>
+            <child>
+              <object class="AdwActionRow">
+                <property name="selectable">False</property>
+                <property name="sensitive">False</property>
+                <property name="subtitle">0</property>
+                <property name="title">Current Stage (0 to 2)</property>
+                <style>
+                  <class name="property"/>
+                </style>
+              </object>
+            </child>
+            <child>
+              <object class="AdwSpinRow" id="bat-ext-trigger">
+                <property name="adjustment">
+                  <object class="GtkAdjustment">
+                    <property name="page-increment">5.0</property>
+                    <property name="step-increment">1.0</property>
+                    <property name="upper">65535.0</property>
+                    <property name="value">5.0</property>
+                  </object>
+                </property>
+                <property name="sensitive">False</property>
+                <property name="subtitle">Number of days on charge before reducing charge limit</property>
+                <property name="title">Trigger Days</property>
+              </object>
+            </child>
+            <child>
+              <object class="AdwSpinRow" id="bat-ext-reset">
+                <property name="adjustment">
+                  <object class="GtkAdjustment">
+                    <property name="page-increment">5.0</property>
+                    <property name="step-increment">1.0</property>
+                    <property name="upper">65535.0</property>
+                    <property name="value">30.0</property>
+                  </object>
+                </property>
+                <property name="sensitive">False</property>
+                <property name="subtitle">Number of minutes off charge before resetting charge limit</property>
+                <property name="title">Reset Minutes</property>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="AdwExpanderRow">
+            <property name="selectable">False</property>
+            <property name="subtitle">These options break normal functionality</property>
+            <property name="title">Advanced Options</property>
+            <child>
+              <object class="AdwPreferencesGroup">
+                <property name="description">These options will conflict with the framework options.</property>
+                <property name="margin-bottom">5</property>
+                <property name="margin-end">5</property>
+                <property name="margin-start">5</property>
+                <property name="margin-top">5</property>
+                <property name="title">ChromeOS Battery Limiter</property>
+                <child>
+                  <object class="AdwActionRow" id="bat-cros-max">
+                    <property name="title">Maximum Limit</property>
+                    <child>
+                      <object class="GtkBox">
+                        <child>
+                          <object class="GtkScale" id="led-chg-255-scale">
+                            <property name="adjustment">
+                              <object class="GtkAdjustment">
+                                <property name="page-increment">16.0</property>
+                                <property name="step-increment">1.0</property>
+                                <property name="upper">255.0</property>
+                                <property name="value">255.0</property>
+                              </object>
+                            </property>
+                            <property name="hexpand">True</property>
+                            <property name="round-digits">0</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="AdwActionRow" id="bat-cros-max_2">
+                    <property name="title">Minimum Limit</property>
+                    <child>
+                      <object class="GtkBox">
+                        <child>
+                          <object class="GtkScale" id="led-chg-255-scale_2">
+                            <property name="adjustment">
+                              <object class="GtkAdjustment">
+                                <property name="page-increment">16.0</property>
+                                <property name="step-increment">1.0</property>
+                                <property name="upper">255.0</property>
+                              </object>
+                            </property>
+                            <property name="hexpand">True</property>
+                            <property name="round-digits">0</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+        <style>
+          <class name="boxed-list"/>
+        </style>
+      </object>
+    </child>
+  </object>
+</interface>
