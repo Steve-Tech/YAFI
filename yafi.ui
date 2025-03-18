@@ -1,0 +1,62 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!-- Created with Cambalache 0.94.1 -->
+<interface>
+  <!-- interface-name yafi.ui -->
+  <!-- interface-description YAFI is another GUI for the Framework Laptop Embedded Controller. -->
+  <!-- interface-authors Steve-Tech -->
+  <requires lib="gtk" version="4.12"/>
+  <requires lib="libadwaita" version="1.4"/>
+  <object class="AdwApplicationWindow" id="root">
+    <property name="default-height">400</property>
+    <property name="default-width">800</property>
+    <child>
+      <object class="AdwNavigationSplitView">
+        <property name="content">
+          <object class="AdwNavigationPage">
+            <property name="title">Yet Another Framework Interface</property>
+            <child>
+              <object class="AdwToolbarView">
+                <child type="top">
+                  <object class="AdwHeaderBar"/>
+                </child>
+                <child>
+                  <object class="GtkScrolledWindow">
+                    <child>
+                      <object class="GtkBox" id="content">
+                        <property name="homogeneous">True</property>
+                        <property name="orientation">vertical</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </property>
+        <property name="sidebar">
+          <object class="AdwNavigationPage">
+            <property name="title">Settings</property>
+            <child>
+              <object class="AdwToolbarView">
+                <child type="top">
+                  <object class="AdwHeaderBar"/>
+                </child>
+                <child>
+                  <object class="GtkScrolledWindow">
+                    <child>
+                      <object class="GtkListBox" id="navbar">
+                        <style>
+                          <class name="navigation-sidebar"/>
+                        </style>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </property>
+      </object>
+    </child>
+  </object>
+</interface>

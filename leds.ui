@@ -1,0 +1,73 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!-- Created with Cambalache 0.94.1 -->
+<interface>
+  <!-- interface-description The LEDs page for YAFI -->
+  <!-- interface-authors Steve-Tech -->
+  <requires lib="gtk" version="4.0"/>
+  <requires lib="libadwaita" version="1.2"/>
+  <object class="GtkBox" id="leds-root">
+    <property name="orientation">vertical</property>
+    <child>
+      <object class="GtkListBox">
+        <property name="margin-end">10</property>
+        <property name="margin-start">10</property>
+        <child>
+          <object class="AdwActionRow">
+            <property name="selectable">False</property>
+            <property name="title">LED Control</property>
+          </object>
+        </child>
+        <child>
+          <object class="AdwActionRow" id="led-pwr">
+            <property name="title">Power Button</property>
+            <child>
+              <object class="GtkBox">
+                <child>
+                  <object class="GtkScale" id="led-pwr-scale">
+                    <property name="adjustment">
+                      <object class="GtkAdjustment">
+                        <property name="lower">1.0</property>
+                        <property name="page-increment">3.0</property>
+                        <property name="step-increment">1.0</property>
+                        <property name="upper">3.0</property>
+                        <property name="value">3.0</property>
+                      </object>
+                    </property>
+                    <property name="hexpand">True</property>
+                    <property name="round-digits">0</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="AdwActionRow" id="led-kbd">
+            <property name="title">Keyboard Backlight</property>
+            <child>
+              <object class="GtkBox">
+                <child>
+                  <object class="GtkScale" id="led-kbd-scale">
+                    <property name="adjustment">
+                      <object class="GtkAdjustment">
+                        <property name="page-increment">16.0</property>
+                        <property name="step-increment">1.0</property>
+                        <property name="upper">255.0</property>
+                        <property name="value">255.0</property>
+                      </object>
+                    </property>
+                    <property name="hexpand">True</property>
+                    <property name="round-digits">0</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+        <style>
+          <class name="boxed-list"/>
+        </style>
+      </object>
+    </child>
+  </object>
+</interface>
