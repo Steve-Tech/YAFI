@@ -1,4 +1,5 @@
 import sys
+import os
 import gi
 gi.require_version('Gtk', '4.0')
 gi.require_version('Adw', '1')
@@ -8,6 +9,7 @@ class YAFI(Adw.Application):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.connect('activate', self.on_activate)
+        self.script_dir = os.path.dirname(os.path.abspath(__file__))
 
     def _change_page(self, builder, page):
         content = builder.get_object("content")
@@ -18,7 +20,7 @@ class YAFI(Adw.Application):
     def _thermals_page(self, builder):
         # Load the thermals.ui file
         thermals_builder = Gtk.Builder()
-        thermals_builder.add_from_file("ui/thermals.ui")
+        thermals_builder.add_from_file(os.path.join(self.script_dir, "ui/thermals.ui"))
 
         # Get the root widget from the thermals.ui file
         thermals_root = thermals_builder.get_object("thermals-root")
@@ -62,7 +64,7 @@ class YAFI(Adw.Application):
     def _leds_page(self, builder):
         # Load the leds.ui file
         leds_builder = Gtk.Builder()
-        leds_builder.add_from_file("ui/leds.ui")
+        leds_builder.add_from_file(os.path.join(self.script_dir, "ui/leds.ui"))
 
         # Get the root widget from the leds.ui file
         leds_root = leds_builder.get_object("leds-root")
@@ -72,7 +74,7 @@ class YAFI(Adw.Application):
     def _battery_page(self, builder):
         # Load the battery.ui file
         battery_builder = Gtk.Builder()
-        battery_builder.add_from_file("ui/battery.ui")
+        battery_builder.add_from_file(os.path.join(self.script_dir, "ui/battery.ui"))
 
         # Get the root widget from the battery.ui file
         battery_root = battery_builder.get_object("battery-root")
@@ -82,7 +84,7 @@ class YAFI(Adw.Application):
     def _hardware_page(self, builder):
         # Load the hardware.ui file
         hardware_builder = Gtk.Builder()
-        hardware_builder.add_from_file("ui/hardware.ui")
+        hardware_builder.add_from_file(os.path.join(self.script_dir, "ui/hardware.ui"))
 
         # Get the root widget from the hardware.ui file
         hardware_root = hardware_builder.get_object("hardware-root")
@@ -92,7 +94,7 @@ class YAFI(Adw.Application):
     def _about_page(self, app_builder):
         # Open About dialog
         builder = Gtk.Builder()
-        builder.add_from_file("ui/about.ui")
+        builder.add_from_file(os.path.join(self.script_dir, "ui/about.ui"))
 
         about = builder.get_object("about-root")
         about.set_modal(True)
@@ -107,7 +109,7 @@ class YAFI(Adw.Application):
     def on_activate(self, app):
         # Create a Builder
         builder = Gtk.Builder()
-        builder.add_from_file("ui/yafi.ui")
+        builder.add_from_file(os.path.join(self.script_dir, "ui/yafi.ui"))
 
         self.current_page = 0
         self._thermals_page(builder)
