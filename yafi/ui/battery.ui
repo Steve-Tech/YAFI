@@ -3,7 +3,7 @@
 <interface>
   <!-- interface-description The Battery page for YAFI -->
   <!-- interface-authors Steve-Tech -->
-  <requires lib="gtk" version="4.0"/>
+  <requires lib="gtk" version="4.12"/>
   <requires lib="libadwaita" version="1.6"/>
   <object class="GtkBox" id="battery-root">
     <property name="orientation">vertical</property>
@@ -18,13 +18,19 @@
           </object>
         </child>
         <child>
-          <object class="AdwActionRow" id="bat-limit">
+          <object class="AdwSwitchRow" id="chg-limit-enable">
+            <property name="title">Enable Charge Limiter</property>
+          </object>
+        </child>
+        <child>
+          <object class="AdwActionRow" id="chg-limit">
+            <property name="sensitive">False</property>
             <property name="subtitle">Limit the maximum charge</property>
             <property name="title">Charge Limit</property>
             <child>
               <object class="GtkBox">
                 <child>
-                  <object class="GtkScale" id="bat-limit-scale">
+                  <object class="GtkScale" id="chg-limit-scale">
                     <property name="adjustment">
                       <object class="GtkAdjustment">
                         <property name="page-increment">10.0</property>
@@ -35,6 +41,49 @@
                     </property>
                     <property name="hexpand">True</property>
                     <property name="round-digits">0</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="AdwActionRow" id="bat-limit">
+            <property name="sensitive">False</property>
+            <property name="subtitle">Limit the minimum charge</property>
+            <property name="title">Discharge Limit</property>
+            <child>
+              <object class="GtkBox">
+                <child>
+                  <object class="GtkScale" id="bat-limit-scale">
+                    <property name="adjustment">
+                      <object class="GtkAdjustment">
+                        <property name="page-increment">10.0</property>
+                        <property name="step-increment">1.0</property>
+                        <property name="upper">100.0</property>
+                      </object>
+                    </property>
+                    <property name="hexpand">True</property>
+                    <property name="round-digits">0</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="AdwActionRow" id="chg-limit-override">
+            <property name="sensitive">False</property>
+            <property name="subtitle">Disables the limiter for one charge cycle</property>
+            <property name="title">Override Charge Limiter</property>
+            <child>
+              <object class="GtkBox">
+                <property name="halign">end</property>
+                <property name="homogeneous">True</property>
+                <property name="valign">center</property>
+                <child>
+                  <object class="GtkButton" id="chg-limit-override-btn">
+                    <property name="label">Override</property>
                   </object>
                 </child>
               </object>
@@ -55,11 +104,30 @@
               </object>
             </child>
             <child>
-              <object class="AdwActionRow">
+              <object class="AdwActionRow" id="bat-ext-stage">
                 <property name="selectable">False</property>
                 <property name="sensitive">False</property>
-                <property name="subtitle">0</property>
                 <property name="title">Current Stage (0 to 2)</property>
+                <style>
+                  <class name="property"/>
+                </style>
+              </object>
+            </child>
+            <child>
+              <object class="AdwActionRow" id="bat-ext-trigger-time">
+                <property name="selectable">False</property>
+                <property name="sensitive">False</property>
+                <property name="title">Time Until Trigger</property>
+                <style>
+                  <class name="property"/>
+                </style>
+              </object>
+            </child>
+            <child>
+              <object class="AdwActionRow" id="bat-ext-reset-time">
+                <property name="selectable">False</property>
+                <property name="sensitive">False</property>
+                <property name="title">Time Until Reset</property>
                 <style>
                   <class name="property"/>
                 </style>
@@ -69,9 +137,10 @@
               <object class="AdwSpinRow" id="bat-ext-trigger">
                 <property name="adjustment">
                   <object class="GtkAdjustment">
+                    <property name="lower">1.0</property>
                     <property name="page-increment">5.0</property>
                     <property name="step-increment">1.0</property>
-                    <property name="upper">65535.0</property>
+                    <property name="upper">99.0</property>
                     <property name="value">5.0</property>
                   </object>
                 </property>
@@ -84,77 +153,16 @@
               <object class="AdwSpinRow" id="bat-ext-reset">
                 <property name="adjustment">
                   <object class="GtkAdjustment">
+                    <property name="lower">1.0</property>
                     <property name="page-increment">5.0</property>
                     <property name="step-increment">1.0</property>
-                    <property name="upper">65535.0</property>
+                    <property name="upper">9999.0</property>
                     <property name="value">30.0</property>
                   </object>
                 </property>
                 <property name="sensitive">False</property>
                 <property name="subtitle">Number of minutes off charge before resetting charge limit</property>
                 <property name="title">Reset Minutes</property>
-              </object>
-            </child>
-          </object>
-        </child>
-        <child>
-          <object class="AdwExpanderRow">
-            <property name="selectable">False</property>
-            <property name="subtitle">These options break normal functionality</property>
-            <property name="title">Advanced Options</property>
-            <child>
-              <object class="AdwPreferencesGroup">
-                <property name="description">These options will conflict with the framework options.</property>
-                <property name="margin-bottom">5</property>
-                <property name="margin-end">5</property>
-                <property name="margin-start">5</property>
-                <property name="margin-top">5</property>
-                <property name="title">ChromeOS Battery Limiter</property>
-                <child>
-                  <object class="AdwActionRow" id="bat-cros-max">
-                    <property name="title">Maximum Limit</property>
-                    <child>
-                      <object class="GtkBox">
-                        <child>
-                          <object class="GtkScale" id="led-chg-255-scale">
-                            <property name="adjustment">
-                              <object class="GtkAdjustment">
-                                <property name="page-increment">16.0</property>
-                                <property name="step-increment">1.0</property>
-                                <property name="upper">255.0</property>
-                                <property name="value">255.0</property>
-                              </object>
-                            </property>
-                            <property name="hexpand">True</property>
-                            <property name="round-digits">0</property>
-                          </object>
-                        </child>
-                      </object>
-                    </child>
-                  </object>
-                </child>
-                <child>
-                  <object class="AdwActionRow" id="bat-cros-min">
-                    <property name="title">Minimum Limit</property>
-                    <child>
-                      <object class="GtkBox">
-                        <child>
-                          <object class="GtkScale" id="led-chg-255-scale_2">
-                            <property name="adjustment">
-                              <object class="GtkAdjustment">
-                                <property name="page-increment">16.0</property>
-                                <property name="step-increment">1.0</property>
-                                <property name="upper">255.0</property>
-                              </object>
-                            </property>
-                            <property name="hexpand">True</property>
-                            <property name="round-digits">0</property>
-                          </object>
-                        </child>
-                      </object>
-                    </child>
-                  </object>
-                </child>
               </object>
             </child>
           </object>

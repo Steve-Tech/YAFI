@@ -26,11 +26,10 @@
                   <object class="GtkScale" id="led-pwr-scale">
                     <property name="adjustment">
                       <object class="GtkAdjustment">
-                        <property name="lower">1.0</property>
                         <property name="page-increment">1.0</property>
                         <property name="step-increment">1.0</property>
-                        <property name="upper">3.0</property>
-                        <property name="value">3.0</property>
+                        <property name="upper">2.0</property>
+                        <property name="value">2.0</property>
                       </object>
                     </property>
                     <property name="hexpand">True</property>
@@ -50,10 +49,10 @@
                   <object class="GtkScale" id="led-kbd-scale">
                     <property name="adjustment">
                       <object class="GtkAdjustment">
-                        <property name="page-increment">16.0</property>
+                        <property name="page-increment">10.0</property>
                         <property name="step-increment">1.0</property>
-                        <property name="upper">255.0</property>
-                        <property name="value">255.0</property>
+                        <property name="upper">100.0</property>
+                        <property name="value">100.0</property>
                       </object>
                     </property>
                     <property name="hexpand">True</property>
@@ -82,41 +81,12 @@
                     <property name="model">
                       <object class="GtkStringList">
                         <items>
-                          <item>Red</item>
-                          <item>Green</item>
-                          <item>Blue</item>
-                          <item>Yellow</item>
-                          <item>White</item>
-                          <item>Amber</item>
+                          <item>Auto</item>
+                          <item>Off</item>
                         </items>
                       </object>
                     </property>
-                    <property name="selected">4</property>
-                    <property name="subtitle">Not all devices support colours.</property>
                     <property name="title">Colour</property>
-                  </object>
-                </child>
-                <child>
-                  <object class="AdwActionRow" id="led-pwr-255">
-                    <property name="title">Brightness</property>
-                    <child>
-                      <object class="GtkBox">
-                        <child>
-                          <object class="GtkScale" id="led-pwr-255-scale">
-                            <property name="adjustment">
-                              <object class="GtkAdjustment">
-                                <property name="page-increment">16.0</property>
-                                <property name="step-increment">1.0</property>
-                                <property name="upper">255.0</property>
-                                <property name="value">255.0</property>
-                              </object>
-                            </property>
-                            <property name="hexpand">True</property>
-                            <property name="round-digits">0</property>
-                          </object>
-                        </child>
-                      </object>
-                    </child>
                   </object>
                 </child>
               </object>
@@ -134,39 +104,12 @@
                     <property name="model">
                       <object class="GtkStringList">
                         <items>
-                          <item>Red</item>
-                          <item>Green</item>
-                          <item>Blue</item>
-                          <item>Yellow</item>
-                          <item>White</item>
-                          <item>Amber</item>
+                          <item>Auto</item>
+                          <item>Off</item>
                         </items>
                       </object>
                     </property>
                     <property name="title">Colour</property>
-                  </object>
-                </child>
-                <child>
-                  <object class="AdwActionRow" id="led-chg-255">
-                    <property name="title">Brightness</property>
-                    <child>
-                      <object class="GtkBox">
-                        <child>
-                          <object class="GtkScale" id="led-chg-255-scale">
-                            <property name="adjustment">
-                              <object class="GtkAdjustment">
-                                <property name="page-increment">16.0</property>
-                                <property name="step-increment">1.0</property>
-                                <property name="upper">255.0</property>
-                                <property name="value">255.0</property>
-                              </object>
-                            </property>
-                            <property name="hexpand">True</property>
-                            <property name="round-digits">0</property>
-                          </object>
-                        </child>
-                      </object>
-                    </child>
                   </object>
                 </child>
               </object>
