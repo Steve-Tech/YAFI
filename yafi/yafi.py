@@ -3,19 +3,33 @@ import os
 import gi
 gi.require_version('Gtk', '4.0')
 gi.require_version('Adw', '1')
-from gi.repository import Gtk, Adw
+from gi.repository import Gtk, Adw, GLib
+
+from cros_ec_python import get_cros_ec
+import cros_ec_python.commands as ec_commands
 
 class YAFI(Adw.Application):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.connect('activate', self.on_activate)
         self.script_dir = os.path.dirname(os.path.abspath(__file__))
+        self.cros_ec = get_cros_ec()
 
     def _change_page(self, builder, page):
         content = builder.get_object("content")
         while content_child := content.get_last_child():
             content.remove(content_child)
         content.append(page)
+
+    def _update_thermals(self, fan_rpm, temp_items):
+        ec_fans = ec_commands.memmap.get_fans(self.cros_ec)
+        fan_rpm.set_subtitle(f"{ec_fans[0]} RPM")
+
+        ec_temp_sensors = ec_commands.memmap.get_temps(self.cros_ec)
+        for i, item in enumerate(temp_items):
+            item.set_subtitle(f"{ec_temp_sensors[i]}°C")
+
+        return self.current_page == 0
 
     def _thermals_page(self, builder):
         # Load the thermals.ui file
@@ -38,6 +52,7 @@ class YAFI(Adw.Application):
                 case 0:  # Auto
                     fan_set_rpm.set_visible(False)
                     fan_set_percent.set_visible(False)
+                    ec_commands.thermal.thermal_auto_fan_ctrl(self.cros_ec)
                 case 1: # Percent
                     fan_set_rpm.set_visible(False)
                     fan_set_percent.set_visible(True)
@@ -45,21 +60,35 @@ class YAFI(Adw.Application):
                     fan_set_rpm.set_visible(True)
                     fan_set_percent.set_visible(False)
 
-        fan_rpm.set_subtitle("1200 RPM")
-
         fan_mode.connect("notify::selected", lambda combo, _: handle_fan_mode(combo.get_selected()))
 
-        fan_percent_scale.connect(
-            "value-changed",
-            lambda scale: fan_set_percent.set_subtitle(f"{int(scale.get_value())} %"),
-        )
+        def handle_fan_percent(scale):
+            percent = int(scale.get_value())
+            ec_commands.pwm.pwm_set_fan_duty(self.cros_ec, percent)
+            fan_set_percent.set_subtitle(f"{percent} %")
+
+        fan_percent_scale.connect("value-changed", handle_fan_percent)
+
+        def handle_fan_rpm(entry):
+            rpm = int(entry.get_text())
+            ec_commands.pwm.pwm_set_fan_rpm(self.cros_ec, rpm)
+
+        fan_set_rpm.connect("notify::text", lambda entry, _: handle_fan_rpm(entry))
 
         temperatures = thermals_builder.get_object("temperatures")
+        temp_items = []
 
-        for i in ((25.0, "Sensor 1"), (30.0, "Sensor 2"), (35.0, "Sensor 3"), (40.0, "Sensor 4")):
-            new_row = Adw.ActionRow(title=i[1], subtitle=f"{i[0]}°C")
+        ec_temp_sensors = ec_commands.thermal.get_temp_sensors(self.cros_ec)
+        for key, value in ec_temp_sensors.items():
+            new_row = Adw.ActionRow(title=key, subtitle=f"{value[0]}°C")
             new_row.add_css_class("property")
             temperatures.append(new_row)
+            temp_items.append(new_row)
+
+        self._update_thermals(fan_rpm, temp_items)
+
+        # Schedule _update_thermals to run every second
+        GLib.timeout_add_seconds(1, self._update_thermals, fan_rpm, temp_items)
 
     def _leds_page(self, builder):
         # Load the leds.ui file
