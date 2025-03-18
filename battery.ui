@@ -134,7 +134,7 @@
                   </object>
                 </child>
                 <child>
-                  <object class="AdwActionRow" id="bat-cros-max_2">
+                  <object class="AdwActionRow" id="bat-cros-min">
                     <property name="title">Minimum Limit</property>
                     <child>
                       <object class="GtkBox">

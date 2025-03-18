@@ -1,0 +1,84 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!-- Created with Cambalache 0.94.1 -->
+<interface>
+  <!-- interface-description The Hardware page for YAFI -->
+  <!-- interface-copyright Steve-Tech -->
+  <requires lib="gtk" version="4.12"/>
+  <requires lib="libadwaita" version="1.4"/>
+  <object class="GtkBox" id="hardware-root">
+    <property name="orientation">vertical</property>
+    <child>
+      <object class="GtkListBox">
+        <property name="margin-end">10</property>
+        <property name="margin-start">10</property>
+        <child>
+          <object class="AdwActionRow">
+            <property name="selectable">False</property>
+            <property name="title">Hardware Status</property>
+          </object>
+        </child>
+        <child>
+          <object class="AdwActionRow">
+            <property name="selectable">False</property>
+            <property name="subtitle">Currently Closed</property>
+            <property name="title">Chassis Open Count</property>
+            <child>
+              <object class="GtkLabel">
+                <property name="label">0</property>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="AdwActionRow">
+            <property name="selectable">False</property>
+            <property name="subtitle">Use Privacy Switch</property>
+            <property name="title">Camera Enabled</property>
+            <child>
+              <object class="GtkBox">
+                <property name="halign">end</property>
+                <property name="homogeneous">True</property>
+                <property name="valign">center</property>
+                <child>
+                  <object class="GtkSwitch">
+                    <property name="active">True</property>
+                    <property name="sensitive">False</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="AdwActionRow">
+            <property name="selectable">False</property>
+            <property name="subtitle">Use Privacy Switch</property>
+            <property name="title">Microphone Enabled</property>
+            <child>
+              <object class="GtkBox">
+                <property name="halign">end</property>
+                <property name="homogeneous">True</property>
+                <property name="valign">center</property>
+                <child>
+                  <object class="GtkSwitch">
+                    <property name="active">True</property>
+                    <property name="sensitive">False</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="AdwSwitchRow">
+            <property name="active">True</property>
+            <property name="title">Fingerprint Enabled</property>
+          </object>
+        </child>
+        <style>
+          <class name="boxed-list"/>
+        </style>
+      </object>
+    </child>
+  </object>
+</interface>
