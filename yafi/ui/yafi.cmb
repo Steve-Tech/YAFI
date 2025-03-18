@@ -6,7 +6,8 @@
 	(2,None,None,"thermals.ui","The Thermals page for YAFI",None,"Steve-Tech",None,None,None,None),
 	(3,None,None,"leds.ui","The LEDs page for YAFI",None,"Steve-Tech",None,None,None,None),
 	(4,None,None,"battery.ui","The Battery page for YAFI",None,"Steve-Tech",None,None,None,None),
-	(5,None,None,"hardware.ui","The Hardware page for YAFI","Steve-Tech",None,None,None,None,None)
+	(5,None,None,"hardware.ui","The Hardware page for YAFI","Steve-Tech",None,None,None,None,None),
+	(6,None,None,"about.ui","The About page for YAFI","Steve-Tech",None,None,None,None,None)
   </ui>
   <object>
 	(1,1,"AdwApplicationWindow","root",None,None,None,None,0,None,None),
@@ -97,7 +98,8 @@
 	(5,12,"AdwSwitchRow",None,2,None,None,None,4,None,None),
 	(5,13,"GtkBox",None,9,None,None,None,0,None,None),
 	(5,14,"GtkBox",None,6,None,None,None,0,None,None),
-	(5,15,"GtkSwitch",None,14,None,None,None,0,None,None)
+	(5,15,"GtkSwitch",None,14,None,None,None,0,None,None),
+	(6,1,"AdwAboutWindow","about-root",None,None,None,None,0,None,None)
   </object>
   <object_property>
 	(1,1,"GtkWindow","default-height","500",None,None,None,None,None,None,None,None,None),
@@ -285,7 +287,16 @@
 	(5,14,"GtkWidget","halign","end",0,None,None,None,None,None,None,None,None),
 	(5,14,"GtkWidget","valign","center",0,None,None,None,None,None,None,None,None),
 	(5,15,"GtkSwitch","active","True",0,None,None,None,None,None,None,None,None),
-	(5,15,"GtkWidget","sensitive","False",0,None,None,None,None,None,None,None,None)
+	(5,15,"GtkWidget","sensitive","False",0,None,None,None,None,None,None,None,None),
+	(6,1,"AdwAboutWindow","application-icon","application-default-icon",None,None,None,None,None,None,None,None,None),
+	(6,1,"AdwAboutWindow","application-name","Yet Another Framework Interface",None,None,None,None,None,None,None,None,None),
+	(6,1,"AdwAboutWindow","comments","YAFI is another GUI for the Framework Laptop Embedded Controller.\nIt is written in Python with a GTK3 theme, and uses the `CrOS_EC_Python` library to communicate with the EC.",None,None,None,None,None,None,None,None,None),
+	(6,1,"AdwAboutWindow","copyright","Copyright © 2025 Stephen Horvath",None,None,None,None,None,None,None,None,None),
+	(6,1,"AdwAboutWindow","developers","Stephen Horvath (Steve-Tech)",None,None,None,None,None,None,None,None,None),
+	(6,1,"AdwAboutWindow","issue-url","https://github.com/Steve-Tech/YAFI/issues",None,None,None,None,None,None,None,None,None),
+	(6,1,"AdwAboutWindow","license-type","gpl-2-0",None,None,None,None,None,None,None,None,None),
+	(6,1,"AdwAboutWindow","version","0.1",None,None,None,None,None,None,None,None,None),
+	(6,1,"AdwAboutWindow","website","https://github.com/Steve-Tech/YAFI",None,None,None,None,None,None,None,None,None)
   </object_property>
   <object_data>
 	(1,17,"GtkWidget",1,1,None,None,None,None,None,None),

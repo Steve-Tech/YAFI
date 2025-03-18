@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!-- Created with Cambalache 0.94.1 -->
+<interface>
+  <!-- interface-description The About page for YAFI -->
+  <!-- interface-copyright Steve-Tech -->
+  <requires lib="libadwaita" version="1.2"/>
+  <object class="AdwAboutWindow" id="about-root">
+    <property name="application-icon">application-default-icon</property>
+    <property name="application-name">Yet Another Framework Interface</property>
+    <property name="comments">YAFI is another GUI for the Framework Laptop Embedded Controller.
+It is written in Python with a GTK3 theme, and uses the `CrOS_EC_Python` library to communicate with the EC.</property>
+    <property name="copyright">Copyright © 2025 Stephen Horvath</property>
+    <property name="developers">Stephen Horvath (Steve-Tech)</property>
+    <property name="issue-url">https://github.com/Steve-Tech/YAFI/issues</property>
+    <property name="license-type">gpl-2-0</property>
+    <property name="version">0.1</property>
+    <property name="website">https://github.com/Steve-Tech/YAFI</property>
+  </object>
+</interface>

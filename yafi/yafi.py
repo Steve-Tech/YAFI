@@ -18,7 +18,7 @@ class YAFI(Adw.Application):
     def _thermals_page(self, builder):
         # Load the thermals.ui file
         thermals_builder = Gtk.Builder()
-        thermals_builder.add_from_file("thermals.ui")
+        thermals_builder.add_from_file("ui/thermals.ui")
 
         # Get the root widget from the thermals.ui file
         thermals_root = thermals_builder.get_object("thermals-root")
@@ -62,7 +62,7 @@ class YAFI(Adw.Application):
     def _leds_page(self, builder):
         # Load the leds.ui file
         leds_builder = Gtk.Builder()
-        leds_builder.add_from_file("leds.ui")
+        leds_builder.add_from_file("ui/leds.ui")
 
         # Get the root widget from the leds.ui file
         leds_root = leds_builder.get_object("leds-root")
@@ -72,7 +72,7 @@ class YAFI(Adw.Application):
     def _battery_page(self, builder):
         # Load the battery.ui file
         battery_builder = Gtk.Builder()
-        battery_builder.add_from_file("battery.ui")
+        battery_builder.add_from_file("ui/battery.ui")
 
         # Get the root widget from the battery.ui file
         battery_root = battery_builder.get_object("battery-root")
@@ -82,21 +82,37 @@ class YAFI(Adw.Application):
     def _hardware_page(self, builder):
         # Load the hardware.ui file
         hardware_builder = Gtk.Builder()
-        hardware_builder.add_from_file("hardware.ui")
+        hardware_builder.add_from_file("ui/hardware.ui")
 
         # Get the root widget from the hardware.ui file
         hardware_root = hardware_builder.get_object("hardware-root")
 
         self._change_page(builder, hardware_root)
 
+    def _about_page(self, app_builder):
+        # Open About dialog
+        builder = Gtk.Builder()
+        builder.add_from_file("ui/about.ui")
+
+        about = builder.get_object("about-root")
+        about.set_modal(True)
+        about.set_transient_for(self.win)
+
+        # Reset the selection in the navbar
+        navbar = app_builder.get_object("navbar")
+        about.connect("close-request", lambda _: navbar.select_row(navbar.get_row_at_index(self.current_page)))
+        
+        about.present()
+
     def on_activate(self, app):
         # Create a Builder
         builder = Gtk.Builder()
-        builder.add_from_file("yafi.ui")
+        builder.add_from_file("ui/yafi.ui")
 
+        self.current_page = 0
         self._thermals_page(builder)
 
-        pages = (("Thermals", self._thermals_page), ("LEDs", self._leds_page), ("Battery", self._battery_page), ("Hardware", self._hardware_page), ("About", self._leds_page))
+        pages = (("Thermals", self._thermals_page), ("LEDs", self._leds_page), ("Battery", self._battery_page), ("Hardware", self._hardware_page), ("About", self._about_page))
 
         # Build the navbar
         navbar = builder.get_object("navbar")
@@ -104,8 +120,14 @@ class YAFI(Adw.Application):
             row = Gtk.ListBoxRow()
             row.set_child(Gtk.Label(label=page[0]))
             navbar.append(row)
+
+        def switch_page(page):
+            # About page is a special case
+            if page != len(pages) - 1:
+                self.current_page = page
+            pages[page][1](builder)
         
-        navbar.connect("row-activated", lambda box, row: pages[row.get_index()][1](builder))
+        navbar.connect("row-activated", lambda box, row: switch_page(row.get_index()))
 
         # Obtain and show the main window
         self.win = builder.get_object("root")
