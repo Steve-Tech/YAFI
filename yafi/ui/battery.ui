@@ -91,7 +91,7 @@
           </object>
         </child>
         <child>
-          <object class="AdwPreferencesGroup">
+          <object class="AdwPreferencesGroup" id="bat-ext-group">
             <property name="description">Preserve the battery lifespan by gradually lowering battery charge voltage automatically if the system is connected to AC for more than the set day limit.</property>
             <property name="margin-bottom">5</property>
             <property name="margin-end">5</property>
@@ -99,7 +99,7 @@
             <property name="margin-top">5</property>
             <property name="title">Battery Extender</property>
             <child>
-              <object class="AdwSwitchRow">
+              <object class="AdwSwitchRow" id="bat-ext-enable">
                 <property name="title">Enable</property>
               </object>
             </child>

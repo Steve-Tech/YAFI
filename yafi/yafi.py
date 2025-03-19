@@ -47,6 +47,7 @@ class YAFI(Adw.Application):
 
         self._change_page(builder, thermals_root)
 
+        # Fan control
         fan_rpm = thermals_builder.get_object("fan-rpm")
         fan_mode = thermals_builder.get_object("fan-mode")
         fan_set_rpm = thermals_builder.get_object("fan-set-rpm")
@@ -83,6 +84,7 @@ class YAFI(Adw.Application):
 
         fan_set_rpm.connect("notify::text", lambda entry, _: handle_fan_rpm(entry))
 
+        # Temperature sensors
         temperatures = thermals_builder.get_object("temperatures")
         temp_items = []
 
@@ -155,8 +157,10 @@ class YAFI(Adw.Application):
             for i, colour in enumerate(all_colours):
                 if supported_colours[i]:
                     strings.append(colour)
-        
-        add_colours(led_pwr_colour_strings, ec_commands.leds.EcLedId.EC_LED_ID_POWER_LED)
+
+        add_colours(
+            led_pwr_colour_strings, ec_commands.leds.EcLedId.EC_LED_ID_POWER_LED
+        )
 
         def handle_led_colour(combobox, led_id):
             colour = combobox.get_selected() - 2
@@ -192,14 +196,35 @@ class YAFI(Adw.Application):
         led_charge_colour = leds_builder.get_object("led-chg-colour")
         led_charge_colour_strings = led_charge_colour.get_model()
 
-        add_colours(led_charge_colour_strings, ec_commands.leds.EcLedId.EC_LED_ID_BATTERY_LED)
-        
+        add_colours(
+            led_charge_colour_strings, ec_commands.leds.EcLedId.EC_LED_ID_BATTERY_LED
+        )
+
         led_charge_colour.connect(
             "notify::selected",
             lambda combo, _: handle_led_colour(
                 combo, ec_commands.leds.EcLedId.EC_LED_ID_BATTERY_LED
             ),
         )
+
+    def _format_timedelta(self, timedelta):
+        days = f"{timedelta.days} days, " if timedelta.days else ""
+        hours, remainder = divmod(timedelta.seconds, 3600)
+        minutes, seconds = divmod(remainder, 60)
+        return days + f"{hours}:{minutes:02}:{seconds:02}"
+
+    def _update_battery(self, bat_ext_stage, bat_ext_trigger_time, bat_ext_reset_time):
+        ec_extender = ec_commands.framework_laptop.get_battery_extender(self.cros_ec)
+
+        bat_ext_stage.set_subtitle(str(ec_extender["current_stage"]))
+        bat_ext_trigger_time.set_subtitle(
+            self._format_timedelta(ec_extender["trigger_timedelta"])
+        )
+        bat_ext_reset_time.set_subtitle(
+            self._format_timedelta(ec_extender["reset_timedelta"])
+        )
+
+        return self.current_page == 2
 
     def _battery_page(self, builder):
         # Load the battery.ui file
@@ -210,6 +235,136 @@ class YAFI(Adw.Application):
         battery_root = battery_builder.get_object("battery-root")
 
         self._change_page(builder, battery_root)
+
+        # Charge limiter
+        chg_limit_enable = battery_builder.get_object("chg-limit-enable")
+        chg_limit = battery_builder.get_object("chg-limit")
+        chg_limit_scale = battery_builder.get_object("chg-limit-scale")
+        bat_limit = battery_builder.get_object("bat-limit")
+        bat_limit_scale = battery_builder.get_object("bat-limit-scale")
+        chg_limit_override = battery_builder.get_object("chg-limit-override")
+        chg_limit_override_btn = battery_builder.get_object("chg-limit-override-btn")
+
+        ec_limit = ec_commands.framework_laptop.get_charge_limit(self.cros_ec)
+        ec_limit_enabled = ec_limit != (0, 0)
+        chg_limit_enable.set_active(ec_limit_enabled)
+        if ec_limit_enabled:
+            chg_limit_scale.set_value(ec_limit[0])
+            bat_limit_scale.set_value(ec_limit[1])
+            chg_limit.set_sensitive(True)
+            bat_limit.set_sensitive(True)
+            chg_limit_override.set_sensitive(True)
+
+        def handle_chg_limit_change(min, max):
+            ec_commands.framework_laptop.set_charge_limit(
+                self.cros_ec, int(min), int(max)
+            )
+
+        def handle_chg_limit_enable(switch):
+            active = switch.get_active()
+            if active:
+                handle_chg_limit_change(
+                    chg_limit_scale.get_value(), bat_limit_scale.get_value()
+                )
+            else:
+                ec_commands.framework_laptop.disable_charge_limit(self.cros_ec)
+
+            chg_limit.set_sensitive(active)
+            bat_limit.set_sensitive(active)
+            chg_limit_override.set_sensitive(active)
+
+        chg_limit_enable.connect(
+            "notify::active", lambda switch, _: handle_chg_limit_enable(switch)
+        )
+        chg_limit_scale.connect(
+            "value-changed",
+            lambda scale: handle_chg_limit_change(
+                scale.get_value(), bat_limit_scale.get_value()
+            ),
+        )
+        bat_limit_scale.connect(
+            "value-changed",
+            lambda scale: handle_chg_limit_change(
+                chg_limit_scale.get_value(), scale.get_value()
+            ),
+        )
+
+        chg_limit_override_btn.connect(
+            "clicked",
+            lambda _: ec_commands.framework_laptop.override_charge_limit(self.cros_ec),
+        )
+
+        # Battery Extender
+        bat_ext_group = battery_builder.get_object("bat-ext-group")
+        bat_ext_enable = battery_builder.get_object("bat-ext-enable")
+        bat_ext_stage = battery_builder.get_object("bat-ext-stage")
+        bat_ext_trigger_time = battery_builder.get_object("bat-ext-trigger-time")
+        bat_ext_reset_time = battery_builder.get_object("bat-ext-reset-time")
+        bat_ext_trigger = battery_builder.get_object("bat-ext-trigger")
+        bat_ext_reset = battery_builder.get_object("bat-ext-reset")
+
+        ec_extender = ec_commands.framework_laptop.get_battery_extender(self.cros_ec)
+        bat_ext_enable.set_active(not ec_extender["disable"])
+        bat_ext_stage.set_sensitive(not ec_extender["disable"])
+        bat_ext_trigger_time.set_sensitive(not ec_extender["disable"])
+        bat_ext_reset_time.set_sensitive(not ec_extender["disable"])
+        bat_ext_trigger.set_sensitive(not ec_extender["disable"])
+        bat_ext_reset.set_sensitive(not ec_extender["disable"])
+
+        bat_ext_stage.set_subtitle(str(ec_extender["current_stage"]))
+        bat_ext_trigger_time.set_subtitle(
+            self._format_timedelta(ec_extender["trigger_timedelta"])
+        )
+        bat_ext_reset_time.set_subtitle(
+            self._format_timedelta(ec_extender["reset_timedelta"])
+        )
+        bat_ext_trigger.set_value(ec_extender["trigger_days"])
+        bat_ext_reset.set_value(ec_extender["reset_minutes"])
+
+        def handle_extender_enable(switch):
+            active = switch.get_active()
+            ec_commands.framework_laptop.set_battery_extender(
+                self.cros_ec,
+                not active,
+                int(bat_ext_trigger.get_value()),
+                int(bat_ext_reset.get_value()),
+            )
+            bat_ext_stage.set_sensitive(active)
+            bat_ext_trigger_time.set_sensitive(active)
+            bat_ext_reset_time.set_sensitive(active)
+            bat_ext_trigger.set_sensitive(active)
+            bat_ext_reset.set_sensitive(active)
+
+        bat_ext_enable.connect(
+            "notify::active", lambda switch, _: handle_extender_enable(switch)
+        )
+        bat_ext_trigger.connect(
+            "notify::value",
+            lambda scale, _: ec_commands.framework_laptop.set_battery_extender(
+                self.cros_ec,
+                not bat_ext_enable.get_active(),
+                int(scale.get_value()),
+                int(bat_ext_reset.get_value()),
+            ),
+        )
+        bat_ext_reset.connect(
+            "notify::value",
+            lambda scale, _: ec_commands.framework_laptop.set_battery_extender(
+                self.cros_ec,
+                not bat_ext_enable.get_active(),
+                int(bat_ext_trigger.get_value()),
+                int(scale.get_value()),
+            ),
+        )
+
+        # Schedule _update_battery to run every second
+        GLib.timeout_add_seconds(
+            1,
+            self._update_battery,
+            bat_ext_stage,
+            bat_ext_trigger_time,
+            bat_ext_reset_time,
+        )
 
     def _hardware_page(self, builder):
         # Load the hardware.ui file
