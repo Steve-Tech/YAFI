@@ -1,0 +1,1 @@
+from .yafi import main

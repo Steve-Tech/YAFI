@@ -29,3 +29,7 @@ Issues = "https://github.com/Steve-Tech/YAFI/issues"
 
 [project.gui-scripts]
 yafi = "yafi:main"
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
