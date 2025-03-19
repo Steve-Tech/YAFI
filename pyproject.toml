@@ -8,7 +8,7 @@ description = "Yet Another Framework Interface"
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
-  "cros_ec_python",
+  "cros_ec_python >= 0.0.2",
   "PyGObject"
 ]
 classifiers = [
@@ -26,3 +26,6 @@ lpc = ["portio"]
 [project.urls]
 Repository = "https://github.com/Steve-Tech/YAFI"
 Issues = "https://github.com/Steve-Tech/YAFI/issues"
+
+[project.gui-scripts]
+yafi = "yafi:main"

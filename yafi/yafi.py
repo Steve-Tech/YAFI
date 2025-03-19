@@ -93,7 +93,7 @@ class YAFI(Adw.Application):
         fan_percent_scale = thermals_builder.get_object("fan-percent-scale")
 
         # Don't let the user change the fans if they can't get back to auto
-        if not ec_commands.general.get_cmd_versions(
+        if ec_commands.general.get_cmd_versions(
             self.cros_ec, ec_commands.thermal.EC_CMD_THERMAL_AUTO_FAN_CTRL
         ):
 
@@ -141,6 +141,8 @@ class YAFI(Adw.Application):
                 )
             else:
                 fan_set_rpm.set_sensitive(False)
+        else:
+            fan_mode.set_sensitive(False)
 
         # Temperature sensors
         temperatures = thermals_builder.get_object("temperatures")
@@ -649,6 +651,9 @@ class YAFI(Adw.Application):
 
         self.win.present()
 
-
-app = YAFI(application_id="au.stevetech.yafi")
-app.run(sys.argv)
+def main():
+    app = YAFI(application_id="au.stevetech.yafi")
+    app.run(sys.argv)
+    
+if __name__ == "__main__":
+    main()
