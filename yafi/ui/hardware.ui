@@ -4,7 +4,7 @@
   <!-- interface-description The Hardware page for YAFI -->
   <!-- interface-copyright Steve-Tech -->
   <requires lib="gtk" version="4.12"/>
-  <requires lib="libadwaita" version="1.4"/>
+  <requires lib="libadwaita" version="1.3"/>
   <object class="GtkBox" id="hardware-root">
     <property name="orientation">vertical</property>
     <child>
@@ -18,20 +18,15 @@
           </object>
         </child>
         <child>
-          <object class="AdwActionRow">
-            <property name="selectable">False</property>
-            <property name="subtitle">Currently Closed</property>
+          <object class="AdwActionRow" id="hw-chassis">
             <property name="title">Chassis Open Count</property>
             <child>
-              <object class="GtkLabel">
-                <property name="label">0</property>
-              </object>
+              <object class="GtkLabel" id="hw-chassis-label"/>
             </child>
           </object>
         </child>
         <child>
-          <object class="AdwActionRow">
-            <property name="selectable">False</property>
+          <object class="AdwActionRow" id="hw-priv-cam">
             <property name="subtitle">Use Privacy Switch</property>
             <property name="title">Camera Enabled</property>
             <child>
@@ -40,7 +35,7 @@
                 <property name="homogeneous">True</property>
                 <property name="valign">center</property>
                 <child>
-                  <object class="GtkSwitch">
+                  <object class="GtkSwitch" id="hw-priv-cam-sw">
                     <property name="active">True</property>
                     <property name="sensitive">False</property>
                   </object>
@@ -50,8 +45,7 @@
           </object>
         </child>
         <child>
-          <object class="AdwActionRow">
-            <property name="selectable">False</property>
+          <object class="AdwActionRow" id="hw-priv-mic">
             <property name="subtitle">Use Privacy Switch</property>
             <property name="title">Microphone Enabled</property>
             <child>
@@ -60,7 +54,7 @@
                 <property name="homogeneous">True</property>
                 <property name="valign">center</property>
                 <child>
-                  <object class="GtkSwitch">
+                  <object class="GtkSwitch" id="hw-priv-mic-sw">
                     <property name="active">True</property>
                     <property name="sensitive">False</property>
                   </object>
@@ -70,9 +64,27 @@
           </object>
         </child>
         <child>
-          <object class="AdwSwitchRow">
-            <property name="active">True</property>
-            <property name="title">Fingerprint Enabled</property>
+          <object class="AdwActionRow" id="hw-fp-pwr">
+            <property name="title">Fingerprint</property>
+            <property name="visible">False</property>
+            <child>
+              <object class="GtkBox">
+                <property name="halign">end</property>
+                <property name="homogeneous">True</property>
+                <property name="spacing">5</property>
+                <property name="valign">center</property>
+                <child>
+                  <object class="GtkButton" id="hw-fp-pwr-en">
+                    <property name="label">Enable</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkButton" id="hw-fp-pwr-dis">
+                    <property name="label">Disable</property>
+                  </object>
+                </child>
+              </object>
+            </child>
           </object>
         </child>
         <style>

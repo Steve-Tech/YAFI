@@ -8,6 +8,7 @@ from gi.repository import Gtk, Adw, GLib
 
 from cros_ec_python import get_cros_ec
 import cros_ec_python.commands as ec_commands
+import cros_ec_python.exceptions as ec_exceptions
 
 
 class YAFI(Adw.Application):
@@ -15,6 +16,7 @@ class YAFI(Adw.Application):
         super().__init__(**kwargs)
         self.connect("activate", self.on_activate)
         self.script_dir = os.path.dirname(os.path.abspath(__file__))
+        self.no_support = []
         self.cros_ec = get_cros_ec()
 
     def _change_page(self, builder, page):
@@ -366,6 +368,66 @@ class YAFI(Adw.Application):
             bat_ext_reset_time,
         )
 
+    def _update_hardware(self, hardware_builder):
+        success = False
+        # Chassis
+        if not ec_commands.framework_laptop.EC_CMD_CHASSIS_INTRUSION in self.no_support:
+            hw_chassis = hardware_builder.get_object("hw-chassis")
+            hw_chassis_label = hardware_builder.get_object("hw-chassis-label")
+            try:
+                ec_chassis = ec_commands.framework_laptop.get_chassis_intrusion(
+                    self.cros_ec
+                )
+
+                hw_chassis_label.set_label(str(ec_chassis["total_open_count"]))
+
+                ec_chassis_open = ec_commands.framework_laptop.get_chassis_open_check(
+                    self.cros_ec
+                )
+                hw_chassis.set_subtitle(
+                    "Currently " + ("Open" if ec_chassis_open else "Closed")
+                )
+
+                success = True
+            except ec_exceptions.ECError as e:
+                if e.status == ec_exceptions.EcStatus.EC_RES_INVALID_COMMAND.value:
+                    self.no_support.append(
+                        ec_commands.framework_laptop.EC_CMD_CHASSIS_INTRUSION
+                    )
+                    hw_chassis.set_visible(False)
+                else:
+                    raise e
+
+        # Privacy Switches
+        if (
+            not ec_commands.framework_laptop.EC_CMD_PRIVACY_SWITCHES_CHECK_MODE
+            in self.no_support
+        ):
+            hw_priv_cam = hardware_builder.get_object("hw-priv-cam")
+            hw_priv_mic = hardware_builder.get_object("hw-priv-mic")
+            hw_priv_cam_sw = hardware_builder.get_object("hw-priv-cam-sw")
+            hw_priv_mic_sw = hardware_builder.get_object("hw-priv-mic-sw")
+
+            try:
+                ec_privacy = ec_commands.framework_laptop.get_privacy_switches(
+                    self.cros_ec
+                )
+                hw_priv_cam_sw.set_active(ec_privacy["camera"])
+                hw_priv_mic_sw.set_active(ec_privacy["microphone"])
+
+                success = True
+            except ec_exceptions.ECError as e:
+                if e.status == ec_exceptions.EcStatus.EC_RES_INVALID_COMMAND.value:
+                    self.no_support.append(
+                        ec_commands.framework_laptop.EC_CMD_PRIVACY_SWITCHES_CHECK_MODE
+                    )
+                    hw_priv_cam.set_visible(False)
+                    hw_priv_mic.set_visible(False)
+                else:
+                    raise e
+
+        return self.current_page == 3 and success
+
     def _hardware_page(self, builder):
         # Load the hardware.ui file
         hardware_builder = Gtk.Builder()
@@ -375,6 +437,32 @@ class YAFI(Adw.Application):
         hardware_root = hardware_builder.get_object("hardware-root")
 
         self._change_page(builder, hardware_root)
+
+        self._update_hardware(hardware_builder)
+
+        # Fingerprint Power
+        hw_fp_pwr = hardware_builder.get_object("hw-fp-pwr")
+        if ec_commands.general.get_cmd_versions(
+            self.cros_ec, ec_commands.framework_laptop.EC_CMD_FP_CONTROL
+        ):
+            hw_fp_pwr_en = hardware_builder.get_object("hw-fp-pwr-en")
+            hw_fp_pwr_dis = hardware_builder.get_object("hw-fp-pwr-dis")
+
+            hw_fp_pwr_en.connect(
+                "clicked",
+                lambda _: ec_commands.framework_laptop.fp_control(self.cros_ec, True),
+            )
+
+            hw_fp_pwr_dis.connect(
+                "clicked",
+                lambda _: ec_commands.framework_laptop.fp_control(self.cros_ec, False),
+            )
+            hw_fp_pwr.set_visible(True)
+        else:
+            hw_fp_pwr.set_visible(False)
+
+        # Schedule _update_hardware to run every second
+        GLib.timeout_add_seconds(1, self._update_hardware, hardware_builder)
 
     def _about_page(self, app_builder):
         # Open About dialog
