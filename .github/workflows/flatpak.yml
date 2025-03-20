@@ -17,8 +17,3 @@ jobs:
       with:
         bundle: yafi-${{ github.sha }}.flatpak
         manifest-path: au.stevetech.yafi.json
-        cache-key: flatpak-builder-${{ github.sha }}
-    - uses: actions/upload-artifact@v4
-      with:
-        name: yafi ${{ github.sha }}
-        path: yafi-${{ github.sha }}.flatpak

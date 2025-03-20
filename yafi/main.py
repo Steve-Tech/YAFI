@@ -21,7 +21,6 @@
 import sys
 import traceback
 import gi
-import os
 from gi.repository import Gio
 
 gi.require_version('Gtk', '4.0')

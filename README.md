@@ -32,7 +32,7 @@ There's probably more, but I happened to have them installed.
 
 #### Install
 
-Install the package with `pip install git+https://github.com/Steve-Tech/YAFI.git`.
+Install the package with `pip install yafi`.
 
 Pipx is also supported.
 
