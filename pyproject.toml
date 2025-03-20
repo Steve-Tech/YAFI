@@ -15,10 +15,10 @@ classifiers = [
     "Development Status :: 2 - Pre-Alpha",
     "Intended Audience :: End Users/Desktop",
     "Programming Language :: Python :: 3",
-    "License :: OSI Approved :: GNU General Public License v2 (GPLv2)",
     "Operating System :: POSIX :: Linux",
     "Topic :: System :: Hardware",
 ]
+license = "GPL-2.0-or-later"
 
 [project.optional-dependencies]
 lpc = ["portio"]
@@ -33,3 +33,6 @@ yafi = "yafi:main"
 [build-system]
 requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = ["yafi"]

@@ -62,6 +62,8 @@ class HardwarePage(Gtk.Box):
         else:
             self.hw_fp_pwr.set_visible(False)
 
+        self._update_hardware(app)
+
         # Schedule _update_hardware to run every second
         GLib.timeout_add_seconds(1, self._update_hardware, app)
 

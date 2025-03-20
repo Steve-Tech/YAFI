@@ -36,6 +36,7 @@ from .hardware import HardwarePage
 
 from cros_ec_python import get_cros_ec
 
+
 class YafiApplication(Adw.Application):
     """The main application singleton class."""
 
@@ -134,7 +135,7 @@ class YafiApplication(Adw.Application):
         dialog.present(self.win)
 
 
-def main(version):
+def main():
     """The application's entry point."""
     app = YafiApplication()
     return app.run(sys.argv)
