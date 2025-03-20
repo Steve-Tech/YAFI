@@ -1,2 +1,3 @@
-from . import yafi
-yafi.main()
+from . import main
+
+main.main()

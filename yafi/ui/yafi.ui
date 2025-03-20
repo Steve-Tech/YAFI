@@ -6,7 +6,7 @@
   <!-- interface-authors Steve-Tech -->
   <requires lib="gtk" version="4.12"/>
   <requires lib="libadwaita" version="1.4"/>
-  <object class="AdwApplicationWindow" id="root">
+  <template class="YafiWindow" parent="AdwApplicationWindow">
     <property name="default-height">500</property>
     <property name="default-width">800</property>
     <child>
@@ -58,5 +58,5 @@
         </property>
       </object>
     </child>
-  </object>
+  </template>
 </interface>

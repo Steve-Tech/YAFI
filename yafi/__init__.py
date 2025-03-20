@@ -1,1 +1,1 @@
-from .yafi import main
+from . import main

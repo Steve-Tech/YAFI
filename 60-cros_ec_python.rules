@@ -1,0 +1,7 @@
+# CrOS_EC_Python udev rules
+
+# LPC Access
+KERNEL=="port", TAG+="uaccess"
+
+# /dev/cros_ec Access
+KERNEL=="cros_ec", TAG+="uaccess"

@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist gettext-domain="yafi">
+	<schema id="au.stevetech.yafi" path="/au/stevetech/yafi/">
+	</schema>
+</schemalist>

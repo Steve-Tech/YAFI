@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gresources>
+  <gresource prefix="/au/stevetech/yafi">
+    <file preprocess="xml-stripblanks">ui/yafi.ui</file>
+    <file preprocess="xml-stripblanks">ui/thermals.ui</file>
+    <file preprocess="xml-stripblanks">ui/leds.ui</file>
+    <file preprocess="xml-stripblanks">ui/battery.ui</file>
+    <file preprocess="xml-stripblanks">ui/hardware.ui</file>
+  </gresource>
+</gresources>

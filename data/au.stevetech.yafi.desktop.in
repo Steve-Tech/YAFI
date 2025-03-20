@@ -1,0 +1,11 @@
+[Desktop Entry]
+Name=YAFI
+Exec=yafi
+Icon=au.stevetech.yafi
+Comment=Yet Another Framework Interface
+Terminal=false
+Type=Application
+Categories=Utility;
+Keywords=GTK;
+StartupNotify=true
+DBusActivatable=true

@@ -1,0 +1,16 @@
+# List of source files containing translatable strings.
+# Please keep this file sorted alphabetically.
+data/au.stevetech.test.desktop.in
+data/au.stevetech.test.metainfo.xml.in
+data/au.stevetech.test.gschema.xml
+yafi/main.py
+yafi/window.py
+yafi/thermals.py
+yafi/leds.py
+yafi/battery.py
+yafi/hardware.py
+yafi/ui/window.ui
+yafi/ui/thermals.ui
+yafi/ui/leds.ui
+yafi/ui/battery.ui
+yafi/ui/hardware.ui

@@ -1,0 +1,48 @@
+{
+    "id" : "au.stevetech.yafi",
+    "runtime" : "org.gnome.Platform",
+    "runtime-version" : "48",
+    "sdk" : "org.gnome.Sdk",
+    "command" : "yafi",
+    "finish-args" : [
+        "--device=all",
+        "--socket=fallback-x11",
+        "--socket=wayland"
+    ],
+    "cleanup" : [
+        "/include",
+        "/lib/pkgconfig",
+        "/man",
+        "/share/doc",
+        "/share/gtk-doc",
+        "/share/man",
+        "/share/pkgconfig",
+        "*.la",
+        "*.a"
+    ],
+    "modules" : [
+        {
+            "name" : "yafi",
+            "builddir" : true,
+            "buildsystem" : "meson",
+            "sources" : [
+                {
+                    "type" : "dir",
+                    "path" : "."
+                }
+            ]
+        },
+        {
+            "name": "cros_ec_python",
+            "buildsystem": "simple",
+            "build-options": {
+              "build-args": [
+                    "--share=network"
+                ]
+            },
+            "build-commands": [
+                "pip3 install --prefix=${FLATPAK_DEST} --no-cache-dir \"cros_ec_python>=0.0.2\""
+            ]
+        }
+    ]
+}
