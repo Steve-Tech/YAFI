@@ -43,5 +43,5 @@ if __name__ == '__main__':
     resource = Gio.Resource.load(os.path.join(pkgdatadir, 'yafi.gresource'))
     resource._register()
 
-    from yafi import main
-    sys.exit(main.main())
+    import yafi
+    sys.exit(yafi.main())

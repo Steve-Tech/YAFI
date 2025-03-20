@@ -57,3 +57,16 @@ Pipx is also supported.
 ### Hardware Info
 
 ![Hardware Page](docs/4-hardware.png)
+
+## Troubleshooting
+
+### `[Errno 13] Permission denied: '/dev/cros_ec'`
+
+This error occurs when the udev rules are not installed or not working. Make sure you have copied the `60-cros_ec_python.rules` file to `/etc/udev/rules.d/` and reloaded the rules with `sudo udevadm control --reload-rules && sudo udevadm trigger`.
+
+### `Could not auto detect device, check you have the required permissions, or specify manually.`
+
+This error occurs when `/dev/cros_ec` is not found, and the `CrOS_EC_Python` library also cannot talk over LPC.
+You can either update your kernel to have a working `cros_ec_dev` driver, or run YAFI as root.
+
+It can also occur if you do not have a CrOS EC, like on non Framework laptops.

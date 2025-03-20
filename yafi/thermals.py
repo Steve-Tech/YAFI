@@ -95,6 +95,10 @@ class ThermalsPage(Gtk.Box):
             self.fan_mode.set_sensitive(False)
 
         # Temperature sensors
+        while temp_child := self.temperatures.get_last_child():
+            self.temperatures.remove(temp_child)
+        self.temp_items.clear()
+
         try:
             ec_temp_sensors = ec_commands.thermal.get_temp_sensors(app.cros_ec)
         except ec_exceptions.ECError as e:

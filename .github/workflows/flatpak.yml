@@ -1,0 +1,24 @@
+name: Flatpak Build
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  flatpak:
+    runs-on: ubuntu-latest
+    container:
+      image: bilelmoussaoui/flatpak-github-actions:gnome-47
+      options: --privileged
+    steps:
+    - uses: actions/checkout@v4
+    - uses: flatpak/flatpak-github-actions/flatpak-builder@v6
+      with:
+        bundle: yafi-${{ github.sha }}.flatpak
+        manifest-path: au.stevetech.yafi.json
+        cache-key: flatpak-builder-${{ github.sha }}
+    - uses: actions/upload-artifact@v4
+      with:
+        name: yafi ${{ github.sha }}
+        path: yafi-${{ github.sha }}.flatpak
