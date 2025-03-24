@@ -1,7 +1,7 @@
 # Yet Another Framework Interface
 
 YAFI is another GUI for the Framework Laptop Embedded Controller.
-It is written in Python with a GTK4 Adwaita theme, and uses the `CrOS_EC_Python` library to communicate with the EC.
+It is written in Python with a GTK4 Adwaita theme, and uses the [`CrOS_EC_Python`](https://github.com/Steve-Tech/CrOS_EC_Python) library to communicate with the EC.
 
 It has support for fan control, temperature monitoring, LED control, and battery limiting.
 
