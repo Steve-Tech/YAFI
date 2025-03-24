@@ -95,12 +95,14 @@ class LedsPage(Gtk.Box):
             all_colours = ["Red", "Green", "Blue", "Yellow", "White", "Amber"]
 
             def add_colours(strings, led_id):
-                supported_colours = ec_commands.leds.led_control_get_max_values(
-                    app.cros_ec, led_id
-                )
-                for i, colour in enumerate(all_colours):
-                    if supported_colours[i]:
-                        strings.append(colour)
+                # Auto and Off should already be present
+                if strings.get_n_items() <= 2:
+                    supported_colours = ec_commands.leds.led_control_get_max_values(
+                        app.cros_ec, led_id
+                    )
+                    for i, colour in enumerate(all_colours):
+                        if supported_colours[i]:
+                            strings.append(colour)
 
             add_colours(
                 led_pwr_colour_strings, ec_commands.leds.EcLedId.EC_LED_ID_POWER_LED
