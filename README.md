@@ -36,6 +36,11 @@ Install the package with `pip install yafi`.
 
 Pipx is also supported.
 
+### Windows
+
+It is possible to run YAFI on Windows using [gvsbuild](https://github.com/wingtk/gvsbuild/) and installing YAFI via pip. You will also need to copy `WinRing0x64.dll` and `WinRing0x64.sys` to either the same
+directory as `python.exe`, or to `C:\Windows\System32`.
+
 ## Screenshots
 
 ### Fan Control and Temperature Monitoring
