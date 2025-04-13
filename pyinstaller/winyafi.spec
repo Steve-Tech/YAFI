@@ -1,14 +1,14 @@
 # -*- mode: python ; coding: utf-8 -*-
 from PyInstaller.utils.hooks import collect_data_files
 
-datas = []
+datas = [('LpcCrOSEC.bin', '.')]
 datas += collect_data_files('yafi')
 
 
 a = Analysis(
     ['winyafi.py'],
     pathex=[],
-    binaries=[('WinRing0x64.dll', '.')],
+    binaries=[],
     datas=datas,
     hiddenimports=['cros_ec_python'],
     hookspath=[],
@@ -16,7 +16,7 @@ a = Analysis(
     runtime_hooks=[],
     excludes=[],
     noarchive=False,
-    optimize=0,
+    optimize=2,
 )
 pyz = PYZ(a.pure)
 
@@ -39,5 +39,6 @@ exe = EXE(
     target_arch=None,
     codesign_identity=None,
     entitlements_file=None,
+    icon=['yafi.ico'],
     uac_admin=True,
 )

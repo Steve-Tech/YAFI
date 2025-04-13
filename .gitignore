@@ -175,3 +175,6 @@ cython_debug/
 
 # Flatpak builder
 .flatpak-builder/
+
+# Binary files
+*.bin
