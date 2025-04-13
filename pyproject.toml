@@ -1,6 +1,6 @@
 [project]
 name = "yafi"
-version = "0.2"
+version = "0.3"
 authors = [
   { name="Steve-Tech" }
 ]
