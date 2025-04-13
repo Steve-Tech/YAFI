@@ -107,7 +107,7 @@ class BatteryPage(Gtk.Box):
             )
         except ec_exceptions.ECError as e:
             if e.ec_status == ec_exceptions.EcStatus.EC_RES_INVALID_COMMAND:
-                app.no_support.append(ec_commands.framework_laptop.EC_CMD_CHARGE_LIMIT)
+                app.no_support.append(ec_commands.framework_laptop.EC_CMD_CHARGE_LIMIT_CONTROL)
                 self.chg_limit_enable.set_sensitive(False)
             else:
                 raise e
@@ -186,31 +186,47 @@ class BatteryPage(Gtk.Box):
         )
 
     def _update_battery(self, app):
-        if ec_commands.framework_laptop.EC_CMD_BATTERY_EXTENDER in app.no_support:
-            return False
+        success = False
 
-        try:
-            ec_extender = ec_commands.framework_laptop.get_battery_extender(
-                app.cros_ec
-            )
+        # Charge Limiter
+        if not ec_commands.framework_laptop.EC_CMD_CHARGE_LIMIT_CONTROL in app.no_support:
+            try:
+                ec_limit = ec_commands.framework_laptop.get_charge_limit(app.cros_ec)
+                self.chg_limit_label.set_label(f"{ec_limit[0]}%")
+                self.bat_limit_label.set_label(f"{ec_limit[1]}%")
 
-            self.bat_ext_stage.set_subtitle(str(ec_extender["current_stage"]))
-            self.bat_ext_trigger_time.set_subtitle(
-                format_timedelta(ec_extender["trigger_timedelta"])
-            )
-            self.bat_ext_reset_time.set_subtitle(
-                format_timedelta(ec_extender["reset_timedelta"])
-            )
-        except ec_exceptions.ECError as e:
-            if e.ec_status == ec_exceptions.EcStatus.EC_RES_INVALID_COMMAND:
-                app.no_support.append(
-                    ec_commands.framework_laptop.EC_CMD_BATTERY_EXTENDER
+                success = True
+            except ec_exceptions.ECError as e:
+                if e.ec_status == ec_exceptions.EcStatus.EC_RES_INVALID_COMMAND:
+                    app.no_support.append(ec_commands.framework_laptop.EC_CMD_CHARGE_LIMIT_CONTROL)
+                else:
+                    raise e
+
+        # Battery Extender
+        if not ec_commands.framework_laptop.EC_CMD_BATTERY_EXTENDER in app.no_support:
+            try:
+                ec_extender = ec_commands.framework_laptop.get_battery_extender(
+                    app.cros_ec
                 )
-                return False
-            else:
-                raise e
 
-        return app.current_page == 2
+                self.bat_ext_stage.set_subtitle(str(ec_extender["current_stage"]))
+                self.bat_ext_trigger_time.set_subtitle(
+                    format_timedelta(ec_extender["trigger_timedelta"])
+                )
+                self.bat_ext_reset_time.set_subtitle(
+                    format_timedelta(ec_extender["reset_timedelta"])
+                )
+
+                success = True
+            except ec_exceptions.ECError as e:
+                if e.ec_status == ec_exceptions.EcStatus.EC_RES_INVALID_COMMAND:
+                    app.no_support.append(
+                        ec_commands.framework_laptop.EC_CMD_BATTERY_EXTENDER
+                    )
+                else:
+                    raise e
+
+        return app.current_page == 2 and success
 
 def format_timedelta(timedelta):
     days = f"{timedelta.days} days, " if timedelta.days else ""
