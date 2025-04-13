@@ -31,8 +31,10 @@ class BatteryPage(Gtk.Box):
 
     chg_limit_enable = Gtk.Template.Child()
     chg_limit = Gtk.Template.Child()
+    chg_limit_label = Gtk.Template.Child()
     chg_limit_scale = Gtk.Template.Child()
     bat_limit = Gtk.Template.Child()
+    bat_limit_label = Gtk.Template.Child()
     bat_limit_scale = Gtk.Template.Child()
     chg_limit_override = Gtk.Template.Child()
     chg_limit_override_btn = Gtk.Template.Child()
@@ -56,7 +58,9 @@ class BatteryPage(Gtk.Box):
             self.chg_limit_enable.set_active(ec_limit_enabled)
             if ec_limit_enabled:
                 self.chg_limit_scale.set_value(ec_limit[0])
+                self.chg_limit_label.set_label(f"{ec_limit[0]}%")
                 self.bat_limit_scale.set_value(ec_limit[1])
+                self.bat_limit_label.set_label(f"{ec_limit[1]}%")
                 self.chg_limit.set_sensitive(True)
                 self.bat_limit.set_sensitive(True)
                 self.chg_limit_override.set_sensitive(True)

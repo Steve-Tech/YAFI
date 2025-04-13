@@ -30,6 +30,9 @@
             <child>
               <object class="GtkBox">
                 <child>
+                  <object class="GtkLabel" id="chg_limit_label"/>
+                </child>
+                <child>
                   <object class="GtkScale" id="chg_limit_scale">
                     <property name="adjustment">
                       <object class="GtkAdjustment">
@@ -54,6 +57,9 @@
             <property name="title">Discharge Limit</property>
             <child>
               <object class="GtkBox">
+                <child>
+                  <object class="GtkLabel" id="bat_limit_label"/>
+                </child>
                 <child>
                   <object class="GtkScale" id="bat_limit_scale">
                     <property name="adjustment">

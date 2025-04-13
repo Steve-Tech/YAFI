@@ -7,4 +7,8 @@
     <file preprocess="xml-stripblanks">ui/battery.ui</file>
     <file preprocess="xml-stripblanks">ui/hardware.ui</file>
   </gresource>
+  <gresource prefix="/au/stevetech/yafi/icons/scalable/actions">
+    <file alias="au.stevetech.yafi.svg" preprocess="xml-stripblanks">../data/icons/hicolor/scalable/apps/au.stevetech.yafi.svg</file>
+    <file alias="au.stevetech.yafi-symbolic.svg" preprocess="xml-stripblanks">../data/icons/hicolor/symbolic/apps/au.stevetech.yafi-symbolic.svg</file>
+  </gresource>
 </gresources>
