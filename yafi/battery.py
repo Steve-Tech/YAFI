@@ -25,211 +25,81 @@ from gi.repository import GLib
 import cros_ec_python.commands as ec_commands
 import cros_ec_python.exceptions as ec_exceptions
 
-@Gtk.Template(resource_path='/au/stevetech/yafi/ui/battery.ui')
+
+@Gtk.Template(resource_path="/au/stevetech/yafi/ui/battery.ui")
 class BatteryPage(Gtk.Box):
-    __gtype_name__ = 'BatteryPage'
+    __gtype_name__ = "BatteryPage"
 
-    chg_limit_enable = Gtk.Template.Child()
-    chg_limit = Gtk.Template.Child()
-    chg_limit_label = Gtk.Template.Child()
-    chg_limit_scale = Gtk.Template.Child()
-    bat_limit = Gtk.Template.Child()
-    bat_limit_label = Gtk.Template.Child()
-    bat_limit_scale = Gtk.Template.Child()
-    chg_limit_override = Gtk.Template.Child()
-    chg_limit_override_btn = Gtk.Template.Child()
+    batt_status = Gtk.Template.Child()
 
-    bat_ext_group = Gtk.Template.Child()
-    bat_ext_enable = Gtk.Template.Child()
-    bat_ext_stage = Gtk.Template.Child()
-    bat_ext_trigger_time = Gtk.Template.Child()
-    bat_ext_reset_time = Gtk.Template.Child()
-    bat_ext_trigger = Gtk.Template.Child()
-    bat_ext_reset = Gtk.Template.Child()
+    batt_charge = Gtk.Template.Child()
+    batt_health = Gtk.Template.Child()
+    batt_cycles_label = Gtk.Template.Child()
+    batt_volts_label = Gtk.Template.Child()
+    batt_watts_label = Gtk.Template.Child()
+    batt_cap_rem_label = Gtk.Template.Child()
+    batt_cap_full_label = Gtk.Template.Child()
+
+    batt_manu = Gtk.Template.Child()
+    batt_model = Gtk.Template.Child()
+    batt_serial = Gtk.Template.Child()
+    batt_type = Gtk.Template.Child()
+    batt_orig_cap = Gtk.Template.Child()
+    batt_orig_volts = Gtk.Template.Child()
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
     def setup(self, app):
-        # Charge limiter
-        try:
-            ec_limit = ec_commands.framework_laptop.get_charge_limit(app.cros_ec)
-            ec_limit_enabled = ec_limit != (0, 0)
-            self.chg_limit_enable.set_active(ec_limit_enabled)
-            if ec_limit_enabled:
-                self.chg_limit_scale.set_value(ec_limit[0])
-                self.chg_limit_label.set_label(f"{ec_limit[0]}%")
-                self.bat_limit_scale.set_value(ec_limit[1])
-                self.bat_limit_label.set_label(f"{ec_limit[1]}%")
-                self.chg_limit.set_sensitive(True)
-                self.bat_limit.set_sensitive(True)
-                self.chg_limit_override.set_sensitive(True)
-
-            def handle_chg_limit_change(min, max):
-                ec_commands.framework_laptop.set_charge_limit(
-                    app.cros_ec, int(min), int(max)
-                )
-
-            def handle_chg_limit_enable(switch):
-                active = switch.get_active()
-                if active:
-                    handle_chg_limit_change(
-                        self.chg_limit_scale.get_value(), self.bat_limit_scale.get_value()
-                    )
-                else:
-                    ec_commands.framework_laptop.disable_charge_limit(app.cros_ec)
-
-                self.chg_limit.set_sensitive(active)
-                self.bat_limit.set_sensitive(active)
-                self.chg_limit_override.set_sensitive(active)
-
-            self.chg_limit_enable.connect(
-                "notify::active", lambda switch, _: handle_chg_limit_enable(switch)
-            )
-            self.chg_limit_scale.connect(
-                "value-changed",
-                lambda scale: handle_chg_limit_change(
-                    scale.get_value(), self.bat_limit_scale.get_value()
-                ),
-            )
-            self.bat_limit_scale.connect(
-                "value-changed",
-                lambda scale: handle_chg_limit_change(
-                    self.chg_limit_scale.get_value(), scale.get_value()
-                ),
-            )
-
-            self.chg_limit_override_btn.connect(
-                "clicked",
-                lambda _: ec_commands.framework_laptop.override_charge_limit(
-                    app.cros_ec
-                ),
-            )
-        except ec_exceptions.ECError as e:
-            if e.ec_status == ec_exceptions.EcStatus.EC_RES_INVALID_COMMAND:
-                app.no_support.append(ec_commands.framework_laptop.EC_CMD_CHARGE_LIMIT_CONTROL)
-                self.chg_limit_enable.set_sensitive(False)
-            else:
-                raise e
-
-        # Battery Extender
-        try:
-            ec_extender = ec_commands.framework_laptop.get_battery_extender(
-                app.cros_ec
-            )
-            self.bat_ext_enable.set_active(not ec_extender["disable"])
-            self.bat_ext_stage.set_sensitive(not ec_extender["disable"])
-            self.bat_ext_trigger_time.set_sensitive(not ec_extender["disable"])
-            self.bat_ext_reset_time.set_sensitive(not ec_extender["disable"])
-            self.bat_ext_trigger.set_sensitive(not ec_extender["disable"])
-            self.bat_ext_reset.set_sensitive(not ec_extender["disable"])
-
-            self.bat_ext_stage.set_subtitle(str(ec_extender["current_stage"]))
-            self.bat_ext_trigger_time.set_subtitle(
-                format_timedelta(ec_extender["trigger_timedelta"])
-            )
-            self.bat_ext_reset_time.set_subtitle(
-                format_timedelta(ec_extender["reset_timedelta"])
-            )
-            self.bat_ext_trigger.set_value(ec_extender["trigger_days"])
-            self.bat_ext_reset.set_value(ec_extender["reset_minutes"])
-
-            def handle_extender_enable(switch):
-                active = switch.get_active()
-                ec_commands.framework_laptop.set_battery_extender(
-                    app.cros_ec,
-                    not active,
-                    int(self.bat_ext_trigger.get_value()),
-                    int(self.bat_ext_reset.get_value()),
-                )
-                self.bat_ext_stage.set_sensitive(active)
-                self.bat_ext_trigger_time.set_sensitive(active)
-                self.bat_ext_reset_time.set_sensitive(active)
-                self.bat_ext_trigger.set_sensitive(active)
-                self.bat_ext_reset.set_sensitive(active)
-
-            self.bat_ext_enable.connect(
-                "notify::active", lambda switch, _: handle_extender_enable(switch)
-            )
-            self.bat_ext_trigger.connect(
-                "notify::value",
-                lambda scale, _: ec_commands.framework_laptop.set_battery_extender(
-                    app.cros_ec,
-                    not self.bat_ext_enable.get_active(),
-                    int(scale.get_value()),
-                    int(self.bat_ext_reset.get_value()),
-                ),
-            )
-            self.bat_ext_reset.connect(
-                "notify::value",
-                lambda scale, _: ec_commands.framework_laptop.set_battery_extender(
-                    app.cros_ec,
-                    not self.bat_ext_enable.get_active(),
-                    int(self.bat_ext_trigger.get_value()),
-                    int(scale.get_value()),
-                ),
-            )
-        except ec_exceptions.ECError as e:
-            if e.ec_status == ec_exceptions.EcStatus.EC_RES_INVALID_COMMAND:
-                app.no_support.append(
-                    ec_commands.framework_laptop.EC_CMD_BATTERY_EXTENDER
-                )
-                self.bat_ext_group.set_visible(False)
-            else:
-                raise e
-
+        battery = ec_commands.memmap.get_battery_values(app.cros_ec)
+        self.batt_manu.set_subtitle(battery["manufacturer"])
+        self.batt_model.set_subtitle(battery["model"])
+        self.batt_serial.set_subtitle(battery["serial"])
+        self.batt_type.set_subtitle(battery["type"])
+        self.batt_orig_cap.set_subtitle(f"{self._get_watts(battery, 'design_capacity'):.2f}Wh")
+        self.batt_orig_volts.set_subtitle(f"{battery['design_voltage']/1000}V")
+        self._update_battery(app, battery)
         # Schedule _update_battery to run every second
-        GLib.timeout_add_seconds(
-            1,
-            self._update_battery,
-            app
+        GLib.timeout_add_seconds(1, self._update_battery, app)
+
+    def _get_watts(self, battery, key, volt_key="design_voltage"):
+        return (battery[key] * battery[volt_key]) / 1000_000
+
+    def _update_battery(self, app, battery=None):
+        if battery is None:
+            battery = ec_commands.memmap.get_battery_values(app.cros_ec)
+
+        status_messages = []
+        if battery["invalid_data"]:
+            status_messages.append("Invalid Data")
+        if not battery["batt_present"]:
+            status_messages.append("No Battery")
+        if battery["ac_present"]:
+            status_messages.append("Plugged in")
+        if battery["level_critical"]:
+            status_messages.append("Critical")
+        if battery["discharging"]:
+            status_messages.append("Discharging")
+        if battery["charging"]:
+            status_messages.append("Charging")
+        self.batt_status.set_subtitle(", ".join(status_messages))
+
+        self.batt_charge.set_fraction(
+            battery["capacity"] / battery["last_full_charge_capacity"]
+        )
+        self.batt_health.set_fraction(
+            battery["last_full_charge_capacity"] / battery["design_capacity"]
+        )
+        self.batt_cycles_label.set_label(str(battery["cycle_count"]))
+        self.batt_volts_label.set_label(f"{battery['volt']/1000:.2f}V")
+        self.batt_watts_label.set_label(
+            f"{self._get_watts(battery, 'rate', 'volt') * (-1 if battery['charging'] else 1):.2f}W"
+        )
+        self.batt_cap_rem_label.set_label(
+            f"{self._get_watts(battery, 'capacity'):.2f}Wh"
+        )
+        self.batt_cap_full_label.set_label(
+            f"{self._get_watts(battery, 'last_full_charge_capacity'):.2f}Wh"
         )
 
-    def _update_battery(self, app):
-        success = False
-
-        # Charge Limiter
-        if not ec_commands.framework_laptop.EC_CMD_CHARGE_LIMIT_CONTROL in app.no_support:
-            try:
-                ec_limit = ec_commands.framework_laptop.get_charge_limit(app.cros_ec)
-                self.chg_limit_label.set_label(f"{ec_limit[0]}%")
-                self.bat_limit_label.set_label(f"{ec_limit[1]}%")
-
-                success = True
-            except ec_exceptions.ECError as e:
-                if e.ec_status == ec_exceptions.EcStatus.EC_RES_INVALID_COMMAND:
-                    app.no_support.append(ec_commands.framework_laptop.EC_CMD_CHARGE_LIMIT_CONTROL)
-                else:
-                    raise e
-
-        # Battery Extender
-        if not ec_commands.framework_laptop.EC_CMD_BATTERY_EXTENDER in app.no_support:
-            try:
-                ec_extender = ec_commands.framework_laptop.get_battery_extender(
-                    app.cros_ec
-                )
-
-                self.bat_ext_stage.set_subtitle(str(ec_extender["current_stage"]))
-                self.bat_ext_trigger_time.set_subtitle(
-                    format_timedelta(ec_extender["trigger_timedelta"])
-                )
-                self.bat_ext_reset_time.set_subtitle(
-                    format_timedelta(ec_extender["reset_timedelta"])
-                )
-
-                success = True
-            except ec_exceptions.ECError as e:
-                if e.ec_status == ec_exceptions.EcStatus.EC_RES_INVALID_COMMAND:
-                    app.no_support.append(
-                        ec_commands.framework_laptop.EC_CMD_BATTERY_EXTENDER
-                    )
-                else:
-                    raise e
-
-        return app.current_page == 2 and success
-
-def format_timedelta(timedelta):
-    days = f"{timedelta.days} days, " if timedelta.days else ""
-    hours, remainder = divmod(timedelta.seconds, 3600)
-    minutes, seconds = divmod(remainder, 60)
-    return days + f"{hours}:{minutes:02}:{seconds:02}"
+        return app.current_page == 2

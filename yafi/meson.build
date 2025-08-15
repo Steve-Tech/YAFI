@@ -33,6 +33,7 @@ yafi_sources = [
   'thermals.py',
   'leds.py',
   'battery.py',
+  'battery_limiter.py',
   'hardware.py',
 ]
 

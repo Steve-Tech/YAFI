@@ -1,9 +1,10 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<!-- Created with Cambalache 0.94.1 -->
+<!-- Created with Cambalache 0.96.1 -->
 <interface>
+  <!-- interface-name leds.ui -->
   <!-- interface-description The LEDs page for YAFI -->
   <!-- interface-authors Steve-Tech -->
-  <requires lib="gtk" version="4.0"/>
+  <requires lib="gtk" version="4.18"/>
   <requires lib="libadwaita" version="1.6"/>
   <template class="LedsPage" parent="GtkBox">
     <property name="orientation">vertical</property>

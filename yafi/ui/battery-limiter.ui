@@ -1,0 +1,183 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!-- Created with Cambalache 0.96.1 -->
+<interface>
+  <!-- interface-name battery-limiter.ui -->
+  <!-- interface-description The Battery page for YAFI -->
+  <!-- interface-authors Steve-Tech -->
+  <requires lib="gtk" version="4.18"/>
+  <requires lib="libadwaita" version="1.6"/>
+  <template class="BatteryLimiterPage" parent="GtkBox">
+    <property name="orientation">vertical</property>
+    <child>
+      <object class="GtkListBox">
+        <property name="margin-end">10</property>
+        <property name="margin-start">10</property>
+        <child>
+          <object class="AdwActionRow">
+            <property name="selectable">False</property>
+            <property name="title">Battery Limiters</property>
+          </object>
+        </child>
+        <child>
+          <object class="AdwSwitchRow" id="chg_limit_enable">
+            <property name="title">Enable Charge Limiter</property>
+          </object>
+        </child>
+        <child>
+          <object class="AdwActionRow" id="chg_limit">
+            <property name="sensitive">False</property>
+            <property name="subtitle">Limit the maximum charge</property>
+            <property name="title">Charge Limit</property>
+            <child>
+              <object class="GtkBox">
+                <child>
+                  <object class="GtkLabel" id="chg_limit_label"/>
+                </child>
+                <child>
+                  <object class="GtkScale" id="chg_limit_scale">
+                    <property name="adjustment">
+                      <object class="GtkAdjustment">
+                        <property name="page-increment">10.0</property>
+                        <property name="step-increment">1.0</property>
+                        <property name="upper">100.0</property>
+                        <property name="value">100.0</property>
+                      </object>
+                    </property>
+                    <property name="hexpand">True</property>
+                    <property name="round-digits">0</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="AdwActionRow" id="bat_limit">
+            <property name="sensitive">False</property>
+            <property name="subtitle">Limit the minimum charge</property>
+            <property name="title">Discharge Limit</property>
+            <child>
+              <object class="GtkBox">
+                <child>
+                  <object class="GtkLabel" id="bat_limit_label"/>
+                </child>
+                <child>
+                  <object class="GtkScale" id="bat_limit_scale">
+                    <property name="adjustment">
+                      <object class="GtkAdjustment">
+                        <property name="page-increment">10.0</property>
+                        <property name="step-increment">1.0</property>
+                        <property name="upper">100.0</property>
+                      </object>
+                    </property>
+                    <property name="hexpand">True</property>
+                    <property name="round-digits">0</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="AdwActionRow" id="chg_limit_override">
+            <property name="sensitive">False</property>
+            <property name="subtitle">Disables the limiter for one charge</property>
+            <property name="title">Override Charge Limiter</property>
+            <child>
+              <object class="GtkBox">
+                <property name="halign">end</property>
+                <property name="homogeneous">True</property>
+                <property name="valign">center</property>
+                <child>
+                  <object class="GtkButton" id="chg_limit_override_btn">
+                    <property name="label">Override</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="AdwPreferencesGroup" id="bat_ext_group">
+            <property name="description">Preserve the battery lifespan by gradually lowering battery charge voltage automatically if the system is connected to AC for more than the set day limit.</property>
+            <property name="margin-bottom">5</property>
+            <property name="margin-end">5</property>
+            <property name="margin-start">5</property>
+            <property name="margin-top">5</property>
+            <property name="title">Battery Extender</property>
+            <child>
+              <object class="AdwSwitchRow" id="bat_ext_enable">
+                <property name="title">Enable</property>
+              </object>
+            </child>
+            <child>
+              <object class="AdwActionRow" id="bat_ext_stage">
+                <property name="selectable">False</property>
+                <property name="sensitive">False</property>
+                <property name="title">Current Stage (0 to 2)</property>
+                <style>
+                  <class name="property"/>
+                </style>
+              </object>
+            </child>
+            <child>
+              <object class="AdwActionRow" id="bat_ext_trigger_time">
+                <property name="selectable">False</property>
+                <property name="sensitive">False</property>
+                <property name="title">Time Until Trigger</property>
+                <style>
+                  <class name="property"/>
+                </style>
+              </object>
+            </child>
+            <child>
+              <object class="AdwActionRow" id="bat_ext_reset_time">
+                <property name="selectable">False</property>
+                <property name="sensitive">False</property>
+                <property name="title">Time Until Reset</property>
+                <style>
+                  <class name="property"/>
+                </style>
+              </object>
+            </child>
+            <child>
+              <object class="AdwSpinRow" id="bat_ext_trigger">
+                <property name="adjustment">
+                  <object class="GtkAdjustment">
+                    <property name="lower">1.0</property>
+                    <property name="page-increment">5.0</property>
+                    <property name="step-increment">1.0</property>
+                    <property name="upper">99.0</property>
+                    <property name="value">5.0</property>
+                  </object>
+                </property>
+                <property name="sensitive">False</property>
+                <property name="subtitle">Number of days on charge before reducing charge limit</property>
+                <property name="title">Trigger Days</property>
+              </object>
+            </child>
+            <child>
+              <object class="AdwSpinRow" id="bat_ext_reset">
+                <property name="adjustment">
+                  <object class="GtkAdjustment">
+                    <property name="lower">1.0</property>
+                    <property name="page-increment">5.0</property>
+                    <property name="step-increment">1.0</property>
+                    <property name="upper">9999.0</property>
+                    <property name="value">30.0</property>
+                  </object>
+                </property>
+                <property name="sensitive">False</property>
+                <property name="subtitle">Number of minutes off charge before resetting charge limit</property>
+                <property name="title">Reset Minutes</property>
+              </object>
+            </child>
+          </object>
+        </child>
+        <style>
+          <class name="boxed-list"/>
+        </style>
+      </object>
+    </child>
+  </template>
+</interface>

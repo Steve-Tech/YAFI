@@ -118,4 +118,4 @@ class HardwarePage(Gtk.Box):
                 else:
                     raise e
 
-        return app.current_page == 3 and success
+        return app.current_page == 4 and success

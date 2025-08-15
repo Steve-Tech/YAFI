@@ -5,6 +5,7 @@
     <file preprocess="xml-stripblanks">ui/thermals.ui</file>
     <file preprocess="xml-stripblanks">ui/leds.ui</file>
     <file preprocess="xml-stripblanks">ui/battery.ui</file>
+    <file preprocess="xml-stripblanks">ui/battery-limiter.ui</file>
     <file preprocess="xml-stripblanks">ui/hardware.ui</file>
   </gresource>
   <gresource prefix="/au/stevetech/yafi/icons/scalable/actions">

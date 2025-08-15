@@ -31,6 +31,7 @@ from .window import YafiWindow
 from .thermals import ThermalsPage
 from .leds import LedsPage
 from .battery import BatteryPage
+from .battery_limiter import BatteryLimiterPage
 from .hardware import HardwarePage
 
 from cros_ec_python import get_cros_ec
@@ -87,6 +88,7 @@ class YafiApplication(Adw.Application):
             ("Thermals", ThermalsPage()),
             ("LEDs", LedsPage()),
             ("Battery", BatteryPage()),
+            ("Battery Limiter", BatteryLimiterPage()),
             ("Hardware", HardwarePage()),
             ("About", None),
         )
