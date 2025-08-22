@@ -1,0 +1,25 @@
+name: PyInstaller Build Linux
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  pyinstaller-linux:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: awalsh128/cache-apt-pkgs-action@latest
+        with:
+          packages: python3-gi gir1.2-gtk-4.0 gir1.2-adw-1
+          version: 0
+      - run: pip install pyinstaller
+      - run: pip install .
+      - run: pyinstaller yafi.spec
+        working-directory: pyinstaller
+      - name: Upload PyInstaller Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          path: pyinstaller/dist/YAFI
+          name: yafi-linux-${{ github.sha }}
