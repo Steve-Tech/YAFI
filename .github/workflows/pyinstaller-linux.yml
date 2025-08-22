@@ -7,16 +7,21 @@ on:
 
 jobs:
   pyinstaller-linux:
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: awalsh128/cache-apt-pkgs-action@latest
+      # We shouldn't use actions/setup-python since PyGObject is compiled against the system Python
+      - name: Install System Dependencies
+        uses: awalsh128/cache-apt-pkgs-action@latest
         with:
           packages: python3-gi gir1.2-gtk-4.0 gir1.2-adw-1
           version: 0
-      - run: pip install pyinstaller
-      - run: pip install .
-      - run: pyinstaller yafi.spec
+      - name: Install PyInstaller
+        run: pip install pyinstaller
+      - name: Build YAFI via Pip
+        run: pip install .
+      - name: Build with PyInstaller
+        run: pyinstaller yafi.spec
         working-directory: pyinstaller
       - name: Upload PyInstaller Artifact
         uses: actions/upload-artifact@v4

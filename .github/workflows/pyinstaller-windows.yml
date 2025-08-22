@@ -1,0 +1,53 @@
+name: PyInstaller Build Windows
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  pyinstaller-windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+            python-version: '3.13' 
+            cache: 'pip'
+
+      - name: Cache GTK4
+        id: cache-gtk4
+        uses: actions/cache@v4
+        with:
+          path: C:\gtk
+          key: Gvsbuild_2025.8.0
+
+      - name: Download GTK4 Gvsbuild zip
+        if: steps.cache-gtk4.outputs.cache-hit != 'true'
+        run: Start-BitsTransfer -Source https://github.com/wingtk/gvsbuild/releases/download/2025.8.0/GTK4_Gvsbuild_2025.8.0_x64.zip -Destination Gvsbuild.zip
+
+      - name: Extract Gvsbuild zip
+        if: steps.cache-gtk4.outputs.cache-hit != 'true'
+        run: Expand-Archive -Path Gvsbuild.zip -DestinationPath C:\gtk -Force
+
+      - name: Install PyGObject wheel
+        run: pip install --force-reinstall (Resolve-Path C:\gtk\wheels\PyGObject*.whl) (Resolve-Path C:\gtk\wheels\pycairo*.whl)
+        
+      - name: Add GTK bin to PATH
+        run: echo "C:\gtk\bin" | Out-File -Append -Encoding ascii $env:GITHUB_PATH
+
+      - name: Install PyInstaller
+        run: pip install pyinstaller
+
+      - name: Build YAFI via Pip
+        run: pip install .
+
+      - name: Build with PyInstaller
+        run: python -m PyInstaller yafi.spec
+        working-directory: pyinstaller
+
+      - name: Upload PyInstaller Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          path: pyinstaller/dist/YAFI.exe
+          name: yafi-windows-${{ github.sha }}

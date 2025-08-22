@@ -1,5 +1,8 @@
 import os
-os.environ["GDK_SCALE"] = "2"
+if os.name == 'nt' and os.environ.get('GDK_SCALE') is None:
+    import ctypes
+    scale_factor = ctypes.windll.shcore.GetScaleFactorForDevice(0)
+    os.environ["GDK_SCALE"] = f"{scale_factor//100}"
 
 from yafi import main
 main()
