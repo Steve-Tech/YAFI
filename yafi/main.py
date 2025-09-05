@@ -72,6 +72,8 @@ class YafiApplication(Adw.Application):
         except Exception as e:
             traceback.print_exc()
 
+            self.error = e
+
             message = (
                 str(e)
                 + "\n\n"
@@ -119,6 +121,7 @@ class YafiApplication(Adw.Application):
             comments="YAFI is another GUI for the Framework Laptop Embedded Controller.\n"
             + "It is written in Python with a GTK3 theme, and uses the `CrOS_EC_Python` library to communicate with the EC.",
             copyright="© 2025 Stephen Horvath",
+            debug_info=self.generate_debug_info(),
             developer_name="Stephen Horvath",
             developers=["Stephen Horvath"],
             issue_url="https://github.com/Steve-Tech/YAFI/issues",
@@ -132,8 +135,92 @@ class YafiApplication(Adw.Application):
     def show_error(self, heading, message):
         dialog = Adw.AlertDialog(heading=heading, body=message)
         dialog.add_response("exit", "Exit")
-        dialog.connect("response", lambda d, r: self.win.destroy())
+        dialog.add_response("about", "About")
+        dialog.set_default_response("exit")
+        dialog.connect("response", lambda d, r: self.on_about_action() if r == "about" else self.win.destroy())
         dialog.present(self.win)
+
+    def generate_debug_info(self):
+        if hasattr(self, 'debug_info'):
+            return self.debug_info
+
+        info = "YAFI Debug Information\n\n"
+
+        if hasattr(self, 'error'):
+            if isinstance(self.error, Exception):
+                info += f"{type(self.error).__name__}: {self.error}\n\n"
+            else:
+                info += f"Error: {self.error}\n\n"
+
+        info += f"Python Version: {sys.version}\n"
+        info += f"GTK Version: {Gtk.get_major_version()}.{Gtk.get_minor_version()}.{Gtk.get_micro_version()}\n"
+        info += f"Adwaita Version: {Adw.get_major_version()}.{Adw.get_minor_version()}.{Adw.get_micro_version()}\n"
+
+        try:
+            import platform
+            info += f"Platform: {platform.platform()}\n"
+            info += f"Processor: {platform.processor() or platform.machine()}\n"
+        except Exception as e:
+            info += f"Platform Error: {type(e).__name__}: {e}\n"
+
+        try:
+            import importlib.metadata
+            info += f"Installed Packages: {[(dist.metadata['Name'], dist.version) for dist in importlib.metadata.distributions()]}\n"
+        except Exception as e:
+            info += f"Importlib Error: {type(e).__name__}: {e}\n"
+
+        try:
+            if sys.platform == "linux":
+                with open('/sys/devices/virtual/dmi/id/sys_vendor', 'r') as f:
+                    info += f"Manufacturer: {f.read().strip()}\n"
+                with open('/sys/devices/virtual/dmi/id/product_name', 'r') as f:
+                    info += f"Model: {f.read().strip()}\n"
+                with open('/sys/devices/virtual/dmi/id/product_sku', 'r') as f:
+                    info += f"SKU: {f.read().strip()}\n"
+                with open('/sys/devices/virtual/dmi/id/bios_vendor', 'r') as f:
+                    info += f"BIOS Vendor: {f.read().strip()}\n"
+                with open('/sys/devices/virtual/dmi/id/bios_version', 'r') as f:
+                    info += f"BIOS Version: {f.read().strip()}\n"
+                with open('/sys/devices/virtual/dmi/id/bios_date', 'r') as f:
+                    info += f"BIOS Date: {f.read().strip()}\n"
+            elif sys.platform == "win32":
+                import subprocess
+                ps_cmd = (
+                    "powershell -Command "
+                    "\"$cs = Get-CimInstance -ClassName Win32_ComputerSystem; "
+                    "$bios = Get-CimInstance -ClassName Win32_BIOS; "
+                    "Write-Output $cs.Manufacturer; "
+                    "Write-Output $cs.Model; "
+                    "Write-Output $cs.SystemSKUNumber; "
+                    "Write-Output $bios.Manufacturer; "
+                    "Write-Output $bios.Name; "
+                    "Write-Output $bios.ReleaseDate\""
+                )
+                output = subprocess.check_output(ps_cmd, shell=True).decode().splitlines()
+                info += f"Manufacturer: {output[0]}\n"
+                info += f"Model: {output[1]}\n"
+                info += f"SKU: {output[2]}\n"
+                info += f"BIOS Vendor: {output[3]}\n"
+                info += f"BIOS Version: {output[4]}\n"
+                # Blank line in the output for some reason
+                info += f"BIOS Date: {output[6]}\n"
+        except Exception as e:
+            info += f"System Info Error: {type(e).__name__}: {e}\n"
+
+        if self.cros_ec:
+            info += f"EC Interface: {type(self.cros_ec).__name__}\n"
+            try:
+                    import cros_ec_python.commands as ec_commands
+                    info += f"EC Version: {ec_commands.general.get_version(self.cros_ec)["version_string_ro"]}\n"
+                    info += f"EC Chip: {ec_commands.general.get_chip_info(self.cros_ec)}\n"
+                    info += f"EC Build Info: {ec_commands.general.get_build_info(self.cros_ec)}\n"
+                    info += f"EC Protocol Version: {ec_commands.general.proto_version(self.cros_ec)}\n"
+                    info += f"EC Protocol Info: {ec_commands.general.get_protocol_info(self.cros_ec)}\n"
+            except Exception as e:
+                info += f"EC Info Error: {type(e).__name__}: {e}\n"
+        
+        self.debug_info = info
+        return info
 
 
 def main():
