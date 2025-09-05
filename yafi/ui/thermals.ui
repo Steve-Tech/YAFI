@@ -4,8 +4,8 @@
   <!-- interface-name thermals.ui -->
   <!-- interface-description The Thermals page for YAFI -->
   <!-- interface-authors Steve-Tech -->
-  <requires lib="gtk" version="4.18"/>
-  <requires lib="libadwaita" version="1.6"/>
+  <requires lib="gtk" version="4.0"/>
+  <requires lib="libadwaita" version="1.0"/>
   <template class="ThermalsPage" parent="GtkBox">
     <property name="homogeneous">True</property>
     <child>

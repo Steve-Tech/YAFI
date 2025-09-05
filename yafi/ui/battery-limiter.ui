@@ -4,8 +4,8 @@
   <!-- interface-name battery-limiter.ui -->
   <!-- interface-description The Battery page for YAFI -->
   <!-- interface-authors Steve-Tech -->
-  <requires lib="gtk" version="4.18"/>
-  <requires lib="libadwaita" version="1.6"/>
+  <requires lib="gtk" version="4.0"/>
+  <requires lib="libadwaita" version="1.0"/>
   <template class="BatteryLimiterPage" parent="GtkBox">
     <property name="orientation">vertical</property>
     <child>

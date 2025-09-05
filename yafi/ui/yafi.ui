@@ -4,8 +4,8 @@
   <!-- interface-name yafi.ui -->
   <!-- interface-description YAFI is another GUI for the Framework Laptop Embedded Controller. -->
   <!-- interface-authors Steve-Tech -->
-  <requires lib="gtk" version="4.12"/>
-  <requires lib="libadwaita" version="1.7"/>
+  <requires lib="gtk" version="4.0"/>
+  <requires lib="libadwaita" version="1.0"/>
   <template class="YafiWindow" parent="AdwApplicationWindow">
     <property name="default-height">500</property>
     <property name="default-width">800</property>
