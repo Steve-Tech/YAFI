@@ -7,9 +7,21 @@ It has support for fan control, temperature monitoring, LED control, and battery
 
 ## Installation
 
-### udev Rules (MUST READ)
+You can download the latest release from the [Releases page](https://github.com/Steve-Tech/YAFI/releases).
 
-To allow YAFI to communicate with the EC, you need to copy the [`60-cros_ec_python.rules`](https://github.com/Steve-Tech/YAFI/blob/main/60-cros_ec_python.rules) file to `/etc/udev/rules.d/` and reload the rules with `sudo udevadm control --reload-rules && sudo udevadm trigger`.
+There are builds for Flatpak, and PyInstaller for portable execution on Linux or Windows.
+
+### Linux
+
+To allow YAFI to communicate with the EC, you need to copy the [`60-cros_ec_python.rules`](60-cros_ec_python.rules) file to `/etc/udev/rules.d/` and reload the rules with `sudo udevadm control --reload-rules && sudo udevadm trigger`.
+
+### Windows
+
+If your Laptop's BIOS supports Framework's EC driver, there is no need to install any third-party drivers. YAFI should also work without administrator privileges.
+
+Otherwise, YAFI supports the [PawnIO](https://pawnio.eu/) driver, and will be automatically used if installed and there is no Framework driver available. YAFI will need to be run as administrator to communicate with the driver.
+
+## Building
 
 ### Flatpak
 
@@ -21,14 +33,12 @@ You can also create a flatpak bundle with `flatpak-builder --repo=repo build au.
 
 #### System Dependencies
 
-The following system dependencies are required for `PyGObject`:
+This project requires PyGObject, and the introspection data for GTK4 and Adwaita.
+On Debian/Ubuntu, you can install these with:
 
-- `python3-dev`
-- `libcairo2-dev`
-- `libgirepository-2.0-dev`
-- `gir1.2-adw-1`
-
-There's probably more, but I happened to have them installed.
+```bash
+sudo apt install python3-gi gir1.2-gtk-4.0 gir1.2-adw-1
+```
 
 #### Install
 
@@ -38,8 +48,7 @@ Pipx is also supported.
 
 ### Windows
 
-It is possible to run YAFI on Windows using [gvsbuild](https://github.com/wingtk/gvsbuild/) and installing YAFI via pip. You will also need to copy `WinRing0x64.dll` and `WinRing0x64.sys` to either the same
-directory as `python.exe`, or to `C:\Windows\System32`.
+It is possible to run YAFI on Windows using [gvsbuild](https://github.com/wingtk/gvsbuild/) and installing YAFI via pip, but it can be complicated and is therefore not recommended.
 
 ## Screenshots
 
@@ -51,17 +60,21 @@ directory as `python.exe`, or to `C:\Windows\System32`.
 
 ![LEDs Page](docs/2-leds.png)
 
-### Battery Limiting
+### Battery Statistics
 
 ![Battery Page](docs/3-battery.png)
 
+### Battery Limiting
+
+![Battery Limiter Page](docs/4-battery-limit.png)
+
 #### Battery Extender
 
-![Battery Extender](docs/3a-battery-ext.png)
+![Battery Extender](docs/4a-battery-ext.png)
 
 ### Hardware Info
 
-![Hardware Page](docs/4-hardware.png)
+![Hardware Page](docs/5-hardware.png)
 
 ## Troubleshooting
 
