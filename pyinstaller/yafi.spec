@@ -2,7 +2,7 @@
 from PyInstaller.utils.hooks import collect_data_files
 import os
 
-datas = [('LpcCrOSEC.bin', '.')] if os.path.exists('LpcCrOSEC.bin') else []
+datas = [('LpcCrOSEC.bin', '.')] if os.name == 'nt' and os.path.exists('LpcCrOSEC.bin') else []
 datas += collect_data_files('yafi')
 
 

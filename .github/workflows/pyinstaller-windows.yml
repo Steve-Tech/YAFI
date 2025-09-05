@@ -30,11 +30,11 @@ jobs:
         if: steps.cache-gtk4.outputs.cache-hit != 'true'
         run: Expand-Archive -Path Gvsbuild.zip -DestinationPath C:\gtk -Force
 
-      - name: Install PyGObject wheel
-        run: pip install --force-reinstall (Resolve-Path C:\gtk\wheels\PyGObject*.whl) (Resolve-Path C:\gtk\wheels\pycairo*.whl)
-        
       - name: Add GTK bin to PATH
         run: echo "C:\gtk\bin" | Out-File -Append -Encoding ascii $env:GITHUB_PATH
+
+      - name: Install PyGObject wheel
+        run: pip install --force-reinstall (Resolve-Path C:\gtk\wheels\PyGObject*.whl) (Resolve-Path C:\gtk\wheels\pycairo*.whl)
 
       - name: Install PyInstaller
         run: pip install pyinstaller
