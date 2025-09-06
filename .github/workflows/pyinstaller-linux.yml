@@ -15,6 +15,7 @@ jobs:
         with:
           packages: python3-gi gir1.2-gtk-4.0 gir1.2-adw-1 libglib2.0-bin
           version: 0
+          execute_install_scripts: true
       - name: Install PyInstaller
         run: pip install pyinstaller
       - name: Build YAFI via Pip
