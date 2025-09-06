@@ -2,7 +2,6 @@ name: PyInstaller Build Linux
 
 on:
   push:
-    branches: [main]
   pull_request:
 
 jobs:
@@ -14,7 +13,7 @@ jobs:
       - name: Install System Dependencies
         uses: awalsh128/cache-apt-pkgs-action@latest
         with:
-          packages: python3-gi gir1.2-gtk-4.0 gir1.2-adw-1
+          packages: python3-gi gir1.2-gtk-4.0 gir1.2-adw-1 libglib2.0-bin
           version: 0
       - name: Install PyInstaller
         run: pip install pyinstaller
