@@ -20,7 +20,8 @@ jobs:
       - name: Build YAFI via Pip
         run: pip install .
       - name: Build with PyInstaller
-        run: pyinstaller yafi.spec
+        # pyinstaller doesn't find the GTK libraries after caching?
+        run: LD_LIBRARY_PATH=/usr/lib/x86_64-linux-gnu pyinstaller yafi.spec
         working-directory: pyinstaller
       - name: Upload PyInstaller Artifact
         uses: actions/upload-artifact@v4
