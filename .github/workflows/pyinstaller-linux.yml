@@ -15,13 +15,13 @@ jobs:
         with:
           packages: python3-gi gir1.2-gtk-4.0 gir1.2-adw-1 libglib2.0-bin
           version: 0
-          execute_install_scripts: true
       - name: Install PyInstaller
         run: pip install pyinstaller
       - name: Build YAFI via Pip
         run: pip install .
       - name: Build with PyInstaller
-        run: pyinstaller yafi.spec
+        # pyinstaller doesn't find the GTK libraries after caching?
+        run: LD_LIBRARY_PATH=/usr/lib/x86_64-linux-gnu pyinstaller yafi.spec
         working-directory: pyinstaller
       - name: Upload PyInstaller Artifact
         uses: actions/upload-artifact@v4
