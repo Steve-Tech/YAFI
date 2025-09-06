@@ -41,7 +41,7 @@
                 ]
             },
             "build-commands": [
-                "pip3 install --prefix=${FLATPAK_DEST} --no-cache-dir \"cros_ec_python>=0.0.4\""
+                "pip3 install --prefix=${FLATPAK_DEST} --no-cache-dir \"cros_ec_python>=0.2.0\""
             ]
         }
     ]

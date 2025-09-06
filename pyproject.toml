@@ -1,6 +1,6 @@
 [project]
 name = "yafi"
-version = "0.3"
+version = "0.4"
 authors = [
   { name="Steve-Tech" }
 ]
@@ -8,11 +8,11 @@ description = "Yet Another Framework Interface"
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
-  "cros_ec_python >= 0.0.4",
+  "cros_ec_python >= 0.2.0",
   "PyGObject"
 ]
 classifiers = [
-    "Development Status :: 2 - Pre-Alpha",
+    "Development Status :: 3 - Alpha",
     "Intended Audience :: End Users/Desktop",
     "Programming Language :: Python :: 3",
     "Operating System :: POSIX :: Linux",
