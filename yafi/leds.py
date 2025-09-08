@@ -104,9 +104,12 @@ class LedsPage(Gtk.Box):
                         if supported_colours[i]:
                             strings.append(colour)
 
-            add_colours(
-                led_pwr_colour_strings, ec_commands.leds.EcLedId.EC_LED_ID_POWER_LED
-            )
+            try:
+                add_colours(
+                    led_pwr_colour_strings, ec_commands.leds.EcLedId.EC_LED_ID_POWER_LED
+                )
+            except ec_exceptions.ECError as e:
+                self.led_pwr_colour.set_sensitive(False)
 
             def handle_led_colour(combobox, led_id):
                 colour = combobox.get_selected() - 2
@@ -141,10 +144,13 @@ class LedsPage(Gtk.Box):
             # Advanced: Charging LED
             led_chg_colour_strings = self.led_chg_colour.get_model()
             
-            add_colours(
-                led_chg_colour_strings,
-                ec_commands.leds.EcLedId.EC_LED_ID_BATTERY_LED,
-            )
+            try:
+                add_colours(
+                    led_chg_colour_strings,
+                    ec_commands.leds.EcLedId.EC_LED_ID_BATTERY_LED,
+                )
+            except ec_exceptions.ECError as e:
+                self.led_chg_colour.set_sensitive(False)
 
             self.led_chg_colour.connect(
                 "notify::selected",
