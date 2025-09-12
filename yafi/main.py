@@ -149,6 +149,8 @@ class YafiApplication(Adw.Application):
         if hasattr(self, 'error'):
             if isinstance(self.error, Exception):
                 info += f"{type(self.error).__name__}: {self.error}\n\n"
+                info += ''.join(traceback.format_exception(type(self.error), self.error, self.error.__traceback__))
+                info += "\n\n"
             else:
                 info += f"Error: {self.error}\n\n"
 
