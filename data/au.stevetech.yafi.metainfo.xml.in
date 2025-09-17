@@ -7,7 +7,7 @@
   <name>Yet Another Framework Interface</name>
   <summary>YAFI is another GUI for the Framework Laptop Embedded Controller</summary>
   <description>
-    <p>It is written in Python with a GTK3 theme, and uses the `CrOS_EC_Python` library to communicate with the EC.</p>
+    <p>It is written in Python with a GTK4 Adwaita theme, and uses the `CrOS_EC_Python` library to communicate with the EC.</p>
   </description>
 
   <developer id="au.stevetech">
@@ -27,7 +27,7 @@
   <!-- Should provide a web link to an online user's reference, a software manual or help page -->
   <!-- <url type="help">https://example.org/help</url> -->
   <!-- URLs of this type should point to a webpage showing information on how to donate to the described software project -->
-  <!-- <url type="donation">https://example.org/donate</url> -->
+  <url type="donation">https://github.com/sponsors/Steve-Tech</url>
   <!-- This could for example be an HTTPS URL to an online form or a page describing how to contact the developer -->
   <!-- <url type="contact">https://example.org/contact</url> -->
   <!-- URLs of this type should point to a webpage showing information on how to contribute to the described software project -->
@@ -48,36 +48,29 @@
 
   <screenshots>
     <screenshot type="default">
-      <image>https://github.com/Steve-Tech/YAFI/blob/main/docs/1-thermal.png</image>
-      <caption>The Thermal page</caption>
+      <image>https://github.com/Steve-Tech/YAFI/blob/main/docs/1-thermals.png</image>
+      <caption>Fan Control and Temperature Monitoring</caption>
     </screenshot>
     <screenshot>
       <image>https://github.com/Steve-Tech/YAFI/blob/main/docs/2-leds.png</image>
-      <caption>The LED page</caption>
+      <caption>LED Control</caption>
     </screenshot>
     <screenshot>
       <image>https://github.com/Steve-Tech/YAFI/blob/main/docs/3-battery.png</image>
-      <caption>The Battery page</caption>
+      <caption>Battery Statistics</caption>
     </screenshot>
     <screenshot>
-      <image>https://github.com/Steve-Tech/YAFI/blob/main/docs/4-hardware.png</image>
-      <caption>The Hardware page</caption>
+      <image>https://github.com/Steve-Tech/YAFI/blob/main/docs/4-battery-limit.png</image>
+      <caption>Battery Limiting</caption>
+    </screenshot>
+    <screenshot>
+      <image>https://github.com/Steve-Tech/YAFI/blob/main/docs/4a-battery-ext.png</image>
+      <caption>Battery Extender</caption>
+    </screenshot>
+    <screenshot>
+      <image>https://github.com/Steve-Tech/YAFI/blob/main/docs/5-hardware.png</image>
+      <caption>Hardware Info</caption>
     </screenshot>
   </screenshots>
-
-  <releases>
-    <release version="0.1.0" date="2025-03-20">
-      <url type="details">https://github.com/Steve-Tech/YAFI/releases/tag/0.1.0</url>
-      <description translate="no">
-        <p>First release</p>
-        <ul>
-          <li>Added Thermal page</li>
-          <li>Added LED page</li>
-          <li>Added Battery page</li>
-          <li>Added Hardware page</li>
-        </ul>
-      </description>
-    </release>
-  </releases>
 
 </component>
