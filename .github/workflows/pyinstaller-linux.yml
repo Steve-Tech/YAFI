@@ -13,7 +13,7 @@ jobs:
       - name: Install System Dependencies
         uses: awalsh128/cache-apt-pkgs-action@latest
         with:
-          packages: python3-gi gir1.2-gtk-4.0 gir1.2-adw-1 libglib2.0-bin
+          packages: python3-gi gir1.2-gtk-4.0 gir1.2-adw-1 libglib2.0-bin python3-tk
           version: 0
       - name: Install PyInstaller
         run: pip install pyinstaller

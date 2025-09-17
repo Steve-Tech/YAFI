@@ -24,8 +24,9 @@ splash = Splash(
     'splash.png',
     binaries=a.binaries,
     datas=a.datas,
-    text_pos=[4, 480],
-    text_size=6,
+    text_pos=(4, 480),
+    # Text doesn't scale on Linux, but does on Windows
+    text_size=12 if os.name == 'nt' else 6,
     minify_script=True,
     always_on_top=True,
 )
