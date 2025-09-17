@@ -18,9 +18,7 @@
 #
 # SPDX-License-Identifier: GPL-2.0-or-later
 
-from gi.repository import Adw
-from gi.repository import Gtk
-from gi.repository import GLib
+from gi.repository import Gtk, Adw, GLib
 
 import cros_ec_python.commands as ec_commands
 import cros_ec_python.exceptions as ec_exceptions

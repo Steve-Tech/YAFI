@@ -20,13 +20,13 @@
 
 import sys
 import traceback
+import threading
 import gi
-from gi.repository import Gio
 
 gi.require_version('Gtk', '4.0')
 gi.require_version('Adw', '1')
 
-from gi.repository import Gtk, Gio, Adw
+from gi.repository import Gtk, Gio, Adw, GLib
 from .window import YafiWindow
 from .thermals import ThermalsPage
 from .leds import LedsPage
@@ -136,9 +136,8 @@ class YafiApplication(Adw.Application):
             comments="YAFI is another GUI for the Framework Laptop Embedded Controller.\n"
             + "It is written in Python with a GTK3 theme, and uses the `CrOS_EC_Python` library to communicate with the EC.",
             copyright="© 2025 Stephen Horvath",
-            debug_info=self.generate_debug_info(),
             developer_name="Stephen Horvath",
-            developers=["Stephen Horvath"],
+            developers=["Stephen Horvath https://github.com/Steve-Tech"],
             issue_url="https://github.com/Steve-Tech/YAFI/issues",
             license_type=Gtk.License.GPL_2_0,
             version="0.5",
@@ -146,6 +145,11 @@ class YafiApplication(Adw.Application):
         )
         about.add_acknowledgement_section(None, ["Framework Computer Inc. https://frame.work/"])
         about.present(self.props.active_window)
+
+        if hasattr(self, 'debug_info'):
+            about.set_debug_info(self.debug_info)
+        else:
+            threading.Thread(target=lambda: GLib.idle_add(about.set_debug_info, self.generate_debug_info())).start()
 
     def show_error(self, heading, message):
         dialog = Adw.AlertDialog(heading=heading, body=message)

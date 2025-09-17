@@ -18,8 +18,7 @@
 #
 # SPDX-License-Identifier: GPL-2.0-or-later
 
-from gi.repository import Adw
-from gi.repository import Gtk
+from gi.repository import Gtk, Adw
 
 @Gtk.Template(resource_path='/au/stevetech/yafi/ui/yafi.ui')
 class YafiWindow(Adw.ApplicationWindow):
