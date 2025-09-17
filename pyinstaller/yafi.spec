@@ -20,12 +20,23 @@ a = Analysis(
     optimize=2,
 )
 pyz = PYZ(a.pure)
+splash = Splash(
+    'splash.png',
+    binaries=a.binaries,
+    datas=a.datas,
+    text_pos=[4, 480],
+    text_size=6,
+    minify_script=True,
+    always_on_top=True,
+)
 
 exe = EXE(
     pyz,
     a.scripts,
     a.binaries,
     a.datas,
+    splash,
+    splash.binaries,
     [],
     name='YAFI',
     debug=False,

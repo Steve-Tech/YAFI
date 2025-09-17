@@ -66,6 +66,11 @@ class YafiApplication(Adw.Application):
         if not self.win:
             self.win = YafiWindow(application=self)
 
+        # Update the splash screen
+        if getattr(sys, 'frozen', False):
+            import pyi_splash
+            pyi_splash.update_text("Detecting EC")
+
         try:
             self.cros_ec = get_cros_ec()
             pass
@@ -81,8 +86,15 @@ class YafiApplication(Adw.Application):
                 + "If you are using a Framework Laptop, there are additional troubleshooting steps in the README."
             )
             self.show_error("EC Initalisation Error", message)
+
+            if getattr(sys, 'frozen', False):
+                pyi_splash.close()
+
             self.win.present()
             return
+
+        if getattr(sys, 'frozen', False):
+            pyi_splash.update_text("Building Interface")
 
         self.change_page(self.win.content, ThermalsPage())
 
@@ -110,6 +122,9 @@ class YafiApplication(Adw.Application):
                 self.on_about_action()
 
         self.win.navbar.connect("row-activated", lambda box, row: switch_page(row.get_index()))
+
+        if getattr(sys, 'frozen', False):
+            pyi_splash.close()
 
         self.win.present()
 
