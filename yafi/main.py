@@ -198,6 +198,8 @@ class YafiApplication(Adw.Application):
                     info += f"Model: {f.read().strip()}\n"
                 with open('/sys/devices/virtual/dmi/id/product_sku', 'r') as f:
                     info += f"SKU: {f.read().strip()}\n"
+                with open('/sys/devices/virtual/dmi/id/board_name', 'r') as f:
+                    info += f"Board: {f.read().strip()}\n"
                 with open('/sys/devices/virtual/dmi/id/bios_vendor', 'r') as f:
                     info += f"BIOS Vendor: {f.read().strip()}\n"
                 with open('/sys/devices/virtual/dmi/id/bios_version', 'r') as f:
@@ -209,10 +211,12 @@ class YafiApplication(Adw.Application):
                 ps_cmd = (
                     "powershell -Command "
                     "\"$cs = Get-CimInstance -ClassName Win32_ComputerSystem; "
+                    "$board = Get-CimInstance -ClassName Win32_BaseBoard; "
                     "$bios = Get-CimInstance -ClassName Win32_BIOS; "
                     "Write-Output $cs.Manufacturer; "
                     "Write-Output $cs.Model; "
                     "Write-Output $cs.SystemSKUNumber; "
+                    "Write-Output $board.Product; "
                     "Write-Output $bios.Manufacturer; "
                     "Write-Output $bios.Name; "
                     "Write-Output $bios.ReleaseDate\""
@@ -221,10 +225,11 @@ class YafiApplication(Adw.Application):
                 info += f"Manufacturer: {output[0]}\n"
                 info += f"Model: {output[1]}\n"
                 info += f"SKU: {output[2]}\n"
-                info += f"BIOS Vendor: {output[3]}\n"
-                info += f"BIOS Version: {output[4]}\n"
+                info += f"Board: {output[3]}\n"
+                info += f"BIOS Vendor: {output[4]}\n"
+                info += f"BIOS Version: {output[5]}\n"
                 # Blank line in the output for some reason
-                info += f"BIOS Date: {output[6]}\n"
+                info += f"BIOS Date: {output[7]}\n"
         except Exception as e:
             info += f"System Info Error: {type(e).__name__}: {e}\n"
 
