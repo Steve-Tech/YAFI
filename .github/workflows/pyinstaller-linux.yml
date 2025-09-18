@@ -21,7 +21,7 @@ jobs:
         run: pip install .
       - name: Build with PyInstaller
         # pyinstaller doesn't find the GTK libraries after caching?
-        run: LD_LIBRARY_PATH=/usr/lib/x86_64-linux-gnu pyinstaller yafi.spec
+        run: LD_LIBRARY_PATH=/usr/lib/x86_64-linux-gnu pyinstaller yafi.spec -- --onefile
         working-directory: pyinstaller
       - name: Upload PyInstaller Artifact
         uses: actions/upload-artifact@v4
