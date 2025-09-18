@@ -23,7 +23,7 @@ jobs:
 
       - name: Download GTK4 Gvsbuild zip
         if: steps.cache-gtk4.outputs.cache-hit != 'true'
-        run: Start-BitsTransfer -Source https://github.com/wingtk/gvsbuild/releases/download/2025.8.0/GTK4_Gvsbuild_2025.8.0_x64.zip -Destination Gvsbuild.zip
+        run: Start-BitsTransfer -Source https://github.com/wingtk/gvsbuild/releases/download/2025.9.0/GTK4_Gvsbuild_2025.9.0_x64.zip -Destination Gvsbuild.zip
 
       - name: Extract Gvsbuild zip
         if: steps.cache-gtk4.outputs.cache-hit != 'true'
@@ -41,12 +41,22 @@ jobs:
       - name: Build YAFI via Pip
         run: pip install .
 
-      - name: Build with PyInstaller
+      - name: Build with PyInstaller (ZIP)
         run: python -m PyInstaller yafi.spec
         working-directory: pyinstaller
 
-      - name: Upload PyInstaller Artifact
+      - name: Upload PyInstaller Artifact (ZIP)
+        uses: actions/upload-artifact@v4
+        with:
+          path: pyinstaller/dist/YAFI/*
+          name: yafi-windows-${{ github.sha }}
+
+      - name: Build with PyInstaller (Standalone)
+        run: python -m PyInstaller yafi.spec --noconfirm -- --onefile
+        working-directory: pyinstaller
+
+      - name: Upload PyInstaller Artifact (Standalone)
         uses: actions/upload-artifact@v4
         with:
           path: pyinstaller/dist/YAFI.exe
-          name: yafi-windows-${{ github.sha }}
+          name: yafi-windows-standalone-${{ github.sha }}

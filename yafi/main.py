@@ -18,6 +18,7 @@
 #
 # SPDX-License-Identifier: GPL-2.0-or-later
 
+import os
 import sys
 import traceback
 import threading
@@ -67,7 +68,8 @@ class YafiApplication(Adw.Application):
             self.win = YafiWindow(application=self)
 
         # Update the splash screen
-        if getattr(sys, 'frozen', False):
+        splash = getattr(sys, 'frozen', False) and '_PYI_SPLASH_IPC' in os.environ
+        if splash:
             import pyi_splash
             pyi_splash.update_text("Detecting EC")
 
@@ -87,13 +89,13 @@ class YafiApplication(Adw.Application):
             )
             self.show_error("EC Initalisation Error", message)
 
-            if getattr(sys, 'frozen', False):
+            if splash:
                 pyi_splash.close()
 
             self.win.present()
             return
 
-        if getattr(sys, 'frozen', False):
+        if splash:
             pyi_splash.update_text("Building Interface")
 
         self.change_page(self.win.content, ThermalsPage())
@@ -123,7 +125,7 @@ class YafiApplication(Adw.Application):
 
         self.win.navbar.connect("row-activated", lambda box, row: switch_page(row.get_index()))
 
-        if getattr(sys, 'frozen', False):
+        if splash:
             pyi_splash.close()
 
         self.win.present()
