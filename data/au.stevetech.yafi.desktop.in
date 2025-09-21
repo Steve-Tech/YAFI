@@ -6,6 +6,6 @@ Comment=Yet Another Framework Interface
 Terminal=false
 Type=Application
 Categories=Utility;
-Keywords=GTK;
+Keywords=Framework;EC;Embedded Controller;
 StartupNotify=true
 DBusActivatable=true

@@ -11,7 +11,7 @@
   </description>
 
   <developer id="au.stevetech">
-    <name>Stephen Horvath</name>
+    <name translate="no">Stephen Horvath</name>
   </developer>
 
   <!-- Required: Should be a link to the upstream homepage for the component -->
@@ -42,8 +42,8 @@
 
   <!-- Applications should set a brand color in both light and dark variants like so -->
   <branding>
-    <color type="primary" scheme_preference="light">#ff00ff</color>
-    <color type="primary" scheme_preference="dark">#993d3d</color>
+    <color type="primary" scheme_preference="light">#7c916f</color>
+    <color type="primary" scheme_preference="dark">#282000</color>
   </branding>
 
   <screenshots>
@@ -72,5 +72,44 @@
       <caption>Hardware Info</caption>
     </screenshot>
   </screenshots>
+
+  <releases>
+    <release version="0.5" date="2025-09-16">
+      <url type="details">https://github.com/Steve-Tech/YAFI/releases/tag/0.5</url>
+      <description>
+        <p>The following bugs have been fixed:</p>
+        <ul>
+          <li>LED page crashing when encountering unsupported LEDs.</li>
+          <li>Scaling issues on Windows.</li>
+          <li>Minimum charge limiter doesn't work.</li>
+        </ul>
+        <p>This release also adds a traceback to the debug info, when there is an error during initialisation.</p>
+      </description>
+    </release>
+    <release version="0.4" date="2025-09-06">
+      <url type="details">https://github.com/Steve-Tech/YAFI/releases/tag/0.4</url>
+      <description>
+        <p>This release also adds a new battery statistics page.</p>
+      </description>
+    </release>
+    <release version="0.3" date="2025-04-13">
+      <url type="details">https://github.com/Steve-Tech/YAFI/releases/tag/0.3</url>
+      <description>
+        <p>YAFI now shows the battery limiter value.</p>
+      </description>
+    </release>
+    <release version="0.2" date="2025-03-24">
+      <url type="details">https://github.com/Steve-Tech/YAFI/releases/tag/0.2</url>
+      <description>
+        <p>This fixes an LED list bug.</p>
+      </description>
+    </release>
+    <release version="0.1" date="2025-03-20">
+      <url type="details">https://github.com/Steve-Tech/YAFI/releases/tag/0.1</url>
+      <description>
+        <p>This is the first release of YAFI.</p>
+      </description>
+    </release>
+  </releases>
 
 </component>

@@ -1,13 +1,14 @@
 {
     "id" : "au.stevetech.yafi",
     "runtime" : "org.gnome.Platform",
-    "runtime-version" : "48",
+    "runtime-version" : "49",
     "sdk" : "org.gnome.Sdk",
     "command" : "yafi",
     "finish-args" : [
         "--device=all",
         "--socket=fallback-x11",
-        "--socket=wayland"
+        "--socket=wayland",
+        "--share=ipc"
     ],
     "cleanup" : [
         "/include",
