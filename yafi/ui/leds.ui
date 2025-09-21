@@ -69,52 +69,6 @@
             <property name="selectable">False</property>
             <property name="subtitle">These options break normal functionality</property>
             <property name="title">Advanced Options</property>
-            <child>
-              <object class="AdwPreferencesGroup">
-                <property name="description">When using these options, the power LED may not turn off with the computer.</property>
-                <property name="margin-bottom">5</property>
-                <property name="margin-end">5</property>
-                <property name="margin-start">5</property>
-                <property name="margin-top">5</property>
-                <property name="title">Power Button LED</property>
-                <child>
-                  <object class="AdwComboRow" id="led_pwr_colour">
-                    <property name="model">
-                      <object class="GtkStringList">
-                        <items>
-                          <item>Auto</item>
-                          <item>Off</item>
-                        </items>
-                      </object>
-                    </property>
-                    <property name="title">Colour</property>
-                  </object>
-                </child>
-              </object>
-            </child>
-            <child>
-              <object class="AdwPreferencesGroup">
-                <property name="description">When using these options, the charging indicator will no longer indicate charging.</property>
-                <property name="margin-bottom">5</property>
-                <property name="margin-end">5</property>
-                <property name="margin-start">5</property>
-                <property name="margin-top">5</property>
-                <property name="title">Charging Indicators</property>
-                <child>
-                  <object class="AdwComboRow" id="led_chg_colour">
-                    <property name="model">
-                      <object class="GtkStringList">
-                        <items>
-                          <item>Auto</item>
-                          <item>Off</item>
-                        </items>
-                      </object>
-                    </property>
-                    <property name="title">Colour</property>
-                  </object>
-                </child>
-              </object>
-            </child>
           </object>
         </child>
         <style>

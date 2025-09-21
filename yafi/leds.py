@@ -27,6 +27,8 @@ import cros_ec_python.exceptions as ec_exceptions
 class LedsPage(Gtk.Box):
     __gtype_name__ = 'LedsPage'
 
+    first_run = True
+
     led_pwr = Gtk.Template.Child()
     led_pwr_scale = Gtk.Template.Child()
 
@@ -35,17 +37,12 @@ class LedsPage(Gtk.Box):
 
     led_advanced = Gtk.Template.Child()
 
-    led_pwr_colour = Gtk.Template.Child()
-
-    led_chg_colour = Gtk.Template.Child()
-
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
     def setup(self, app):
         # Power LED
         try:
-
             def handle_led_pwr(scale):
                 value = int(abs(scale.get_value() - 2))
                 ec_commands.framework_laptop.set_fp_led_level(app.cros_ec, value)
@@ -84,31 +81,35 @@ class LedsPage(Gtk.Box):
             self.led_kbd.set_visible(False)
 
         # Advanced options
-        if ec_commands.general.get_cmd_versions(
-            app.cros_ec, ec_commands.leds.EC_CMD_LED_CONTROL
+        if (
+            ec_commands.general.get_cmd_versions(
+                app.cros_ec, ec_commands.leds.EC_CMD_LED_CONTROL
+            )
+            and self.first_run
         ):
 
-            # Advanced: Power LED
-            led_pwr_colour_strings = self.led_pwr_colour.get_model()
-
             all_colours = ["Red", "Green", "Blue", "Yellow", "White", "Amber"]
-
-            def add_colours(strings, led_id):
-                # Auto and Off should already be present
-                if strings.get_n_items() <= 2:
-                    supported_colours = ec_commands.leds.led_control_get_max_values(
+            led_names = {
+                ec_commands.leds.EcLedId.EC_LED_ID_BATTERY_LED: "Battery LED",
+                ec_commands.leds.EcLedId.EC_LED_ID_POWER_LED: "Power LED",
+                ec_commands.leds.EcLedId.EC_LED_ID_ADAPTER_LED: "Adapter LED",
+                ec_commands.leds.EcLedId.EC_LED_ID_LEFT_LED: "Left LED",
+                ec_commands.leds.EcLedId.EC_LED_ID_RIGHT_LED: "Right LED",
+                ec_commands.leds.EcLedId.EC_LED_ID_RECOVERY_HW_REINIT_LED: "Recovery LED",
+                ec_commands.leds.EcLedId.EC_LED_ID_SYSRQ_DEBUG_LED: "SysRq LED",
+            }
+            leds = {}
+            for i in range(ec_commands.leds.EcLedId.EC_LED_ID_COUNT.value):
+                try:
+                    led_id = ec_commands.leds.EcLedId(i)
+                    leds[led_id] = ec_commands.leds.led_control_get_max_values(
                         app.cros_ec, led_id
                     )
-                    for i, colour in enumerate(all_colours):
-                        if supported_colours[i]:
-                            strings.append(colour)
-
-            try:
-                add_colours(
-                    led_pwr_colour_strings, ec_commands.leds.EcLedId.EC_LED_ID_POWER_LED
-                )
-            except ec_exceptions.ECError as e:
-                self.led_pwr_colour.set_sensitive(False)
+                except ec_exceptions.ECError as e:
+                    if e.ec_status == ec_exceptions.EcStatus.EC_RES_INVALID_PARAM:
+                        continue
+                    else:
+                        raise e
 
             def handle_led_colour(combobox, led_id):
                 colour = combobox.get_selected() - 2
@@ -132,30 +133,20 @@ class LedsPage(Gtk.Box):
                             100,
                             ec_commands.leds.EcLedColors(colour_idx),
                         )
+            for led_id, supported_colours in leds.items():
+                if any(supported_colours):
+                    combo = Adw.ComboRow(title=led_names[led_id])
+                    model = Gtk.StringList.new(["Auto", "Off"])
+                    for i, colour in enumerate(all_colours):
+                        if supported_colours[i]:
+                            model.append(colour)
+                    combo.set_model(model)
+                    combo.connect(
+                        "notify::selected",
+                        lambda combobox, _, led_id=led_id: handle_led_colour(
+                            combobox, led_id
+                        ),
+                    )
+                    self.led_advanced.add_row(combo)
 
-            self.led_pwr_colour.connect(
-                "notify::selected",
-                lambda combo, _: handle_led_colour(
-                    combo, ec_commands.leds.EcLedId.EC_LED_ID_POWER_LED
-                ),
-            )
-
-            # Advanced: Charging LED
-            led_chg_colour_strings = self.led_chg_colour.get_model()
-            
-            try:
-                add_colours(
-                    led_chg_colour_strings,
-                    ec_commands.leds.EcLedId.EC_LED_ID_BATTERY_LED,
-                )
-            except ec_exceptions.ECError as e:
-                self.led_chg_colour.set_sensitive(False)
-
-            self.led_chg_colour.connect(
-                "notify::selected",
-                lambda combo, _: handle_led_colour(
-                    combo, ec_commands.leds.EcLedId.EC_LED_ID_BATTERY_LED
-                ),
-            )
-        else:
-            self.led_advanced.set_visible(False)
+        self.first_run = False
