@@ -105,7 +105,7 @@ class YafiApplication(Adw.Application):
             ("LEDs", LedsPage()),
             ("Battery", BatteryPage()),
             ("Battery Limiter", BatteryLimiterPage()),
-            ("Hardware", HardwarePage()),
+            ("Sensors", HardwarePage()),
             ("About", None),
         )
 

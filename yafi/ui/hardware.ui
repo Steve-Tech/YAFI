@@ -2,7 +2,7 @@
 <!-- Created with Cambalache 0.96.1 -->
 <interface>
   <!-- interface-name hardware.ui -->
-  <!-- interface-description The Hardware page for YAFI -->
+  <!-- interface-description The Sensors page for YAFI -->
   <!-- interface-copyright Steve-Tech -->
   <requires lib="gtk" version="4.0"/>
   <requires lib="libadwaita" version="1.0"/>
@@ -15,7 +15,15 @@
         <child>
           <object class="AdwActionRow">
             <property name="selectable">False</property>
-            <property name="title">Hardware Status</property>
+            <property name="title">Sensors</property>
+          </object>
+        </child>
+        <child>
+          <object class="AdwActionRow" id="hw_als">
+            <property name="title">Ambient Light Sensor</property>
+            <child>
+              <object class="GtkLabel" id="hw_als_label"/>
+            </child>
           </object>
         </child>
         <child>
@@ -23,6 +31,30 @@
             <property name="title">Chassis Open Count</property>
             <child>
               <object class="GtkLabel" id="hw_chassis_label"/>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="AdwActionRow" id="hw_fp_pwr">
+            <property name="title">Fingerprint</property>
+            <property name="visible">False</property>
+            <child>
+              <object class="GtkBox">
+                <property name="halign">end</property>
+                <property name="homogeneous">True</property>
+                <property name="spacing">5</property>
+                <property name="valign">center</property>
+                <child>
+                  <object class="GtkButton" id="hw_fp_pwr_en">
+                    <property name="label">Enable</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkButton" id="hw_fp_pwr_dis">
+                    <property name="label">Disable</property>
+                  </object>
+                </child>
+              </object>
             </child>
           </object>
         </child>
@@ -65,23 +97,35 @@
           </object>
         </child>
         <child>
-          <object class="AdwActionRow" id="hw_fp_pwr">
-            <property name="title">Fingerprint</property>
-            <property name="visible">False</property>
+          <object class="AdwActionRow" id="hw_lid_open">
+            <property name="title">Lid Open</property>
             <child>
               <object class="GtkBox">
                 <property name="halign">end</property>
                 <property name="homogeneous">True</property>
-                <property name="spacing">5</property>
                 <property name="valign">center</property>
                 <child>
-                  <object class="GtkButton" id="hw_fp_pwr_en">
-                    <property name="label">Enable</property>
+                  <object class="GtkSwitch" id="hw_lid_open_sw">
+                    <property name="active">True</property>
+                    <property name="sensitive">False</property>
                   </object>
                 </child>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="AdwActionRow" id="hw_pwr_btn">
+            <property name="title">Power Button Pressed</property>
+            <child>
+              <object class="GtkBox">
+                <property name="halign">end</property>
+                <property name="homogeneous">True</property>
+                <property name="valign">center</property>
                 <child>
-                  <object class="GtkButton" id="hw_fp_pwr_dis">
-                    <property name="label">Disable</property>
+                  <object class="GtkSwitch" id="hw_pwr_btn_sw">
+                    <property name="active">True</property>
+                    <property name="sensitive">False</property>
                   </object>
                 </child>
               </object>

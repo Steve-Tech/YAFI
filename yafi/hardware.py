@@ -27,17 +27,24 @@ import cros_ec_python.exceptions as ec_exceptions
 class HardwarePage(Gtk.Box):
     __gtype_name__ = 'HardwarePage'
 
+    hw_als = Gtk.Template.Child()
+    hw_als_label = Gtk.Template.Child()
+
     hw_chassis = Gtk.Template.Child()
     hw_chassis_label = Gtk.Template.Child()
+
+    hw_fp_pwr = Gtk.Template.Child()
+    hw_fp_pwr_en = Gtk.Template.Child()
+    hw_fp_pwr_dis = Gtk.Template.Child()
 
     hw_priv_cam = Gtk.Template.Child()
     hw_priv_cam_sw = Gtk.Template.Child()
     hw_priv_mic = Gtk.Template.Child()
     hw_priv_mic_sw = Gtk.Template.Child()
-
-    hw_fp_pwr = Gtk.Template.Child()
-    hw_fp_pwr_en = Gtk.Template.Child()
-    hw_fp_pwr_dis = Gtk.Template.Child()
+    hw_lid_open = Gtk.Template.Child()
+    hw_lid_open_sw = Gtk.Template.Child()
+    hw_pwr_btn = Gtk.Template.Child()
+    hw_pwr_btn_sw = Gtk.Template.Child()
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -66,7 +73,13 @@ class HardwarePage(Gtk.Box):
         GLib.timeout_add_seconds(1, self._update_hardware, app)
 
     def _update_hardware(self, app):
-        success = False
+        # Memmap (ALS and Lid Open)
+        als = ec_commands.memmap.get_als(app.cros_ec)
+        self.hw_als_label.set_label(f"{als[0]} lux" if als[0] != 65535 else "MAX")
+        switches = ec_commands.memmap.get_switches(app.cros_ec)
+        self.hw_lid_open_sw.set_active(switches["lid_open"])
+        self.hw_pwr_btn_sw.set_active(switches["power_button_pressed"])
+
         # Chassis
         if not ec_commands.framework_laptop.EC_CMD_CHASSIS_INTRUSION in app.no_support:
             try:
@@ -82,8 +95,6 @@ class HardwarePage(Gtk.Box):
                 self.hw_chassis.set_subtitle(
                     "Currently " + ("Open" if ec_chassis_open else "Closed")
                 )
-
-                success = True
             except ec_exceptions.ECError as e:
                 if e.ec_status == ec_exceptions.EcStatus.EC_RES_INVALID_COMMAND:
                     app.no_support.append(
@@ -104,8 +115,6 @@ class HardwarePage(Gtk.Box):
                 )
                 self.hw_priv_cam_sw.set_active(ec_privacy["camera"])
                 self.hw_priv_mic_sw.set_active(ec_privacy["microphone"])
-
-                success = True
             except ec_exceptions.ECError as e:
                 if e.ec_status == ec_exceptions.EcStatus.EC_RES_INVALID_COMMAND:
                     app.no_support.append(
@@ -116,4 +125,4 @@ class HardwarePage(Gtk.Box):
                 else:
                     raise e
 
-        return app.current_page == 4 and success
+        return app.current_page == 4
