@@ -22,6 +22,7 @@
         "*.a"
     ],
     "modules" : [
+        "python3-cros_ec_python.json",
         {
             "name" : "yafi",
             "builddir" : true,
@@ -31,18 +32,6 @@
                     "type" : "dir",
                     "path" : "."
                 }
-            ]
-        },
-        {
-            "name": "cros_ec_python",
-            "buildsystem": "simple",
-            "build-options": {
-              "build-args": [
-                    "--share=network"
-                ]
-            },
-            "build-commands": [
-                "pip3 install --prefix=${FLATPAK_DEST} --no-cache-dir \"cros_ec_python>=0.2.0\""
             ]
         }
     ]
