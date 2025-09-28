@@ -11,6 +11,8 @@ You can download the latest release from the [Releases page](https://github.com/
 
 There are builds for Flatpak, and PyInstaller for portable execution on Linux or Windows.
 
+YAFI is also available on [Flathub](https://flathub.org/en/apps/au.stevetech.yafi): `flatpak install flathub au.stevetech.yafi`.
+
 ### Linux
 
 To allow YAFI to communicate with the EC, you need to copy the [`60-cros_ec_python.rules`](60-cros_ec_python.rules) file to `/etc/udev/rules.d/` and reload the rules with `sudo udevadm control --reload-rules && sudo udevadm trigger`.
@@ -20,6 +22,8 @@ To allow YAFI to communicate with the EC, you need to copy the [`60-cros_ec_pyth
 If your Laptop's BIOS supports Framework's EC driver, there is no need to install any third-party drivers. YAFI should also work without administrator privileges.
 
 Otherwise, YAFI supports the [PawnIO](https://pawnio.eu/) driver, and will be automatically used if installed and there is no Framework driver available. YAFI will need to be run as administrator to communicate with the driver.
+
+Currently the PawnIO driver does not support Framework 13 mainboards with 11th, 12th, or 13th Gen Intel CPUs.
 
 ## Building
 
