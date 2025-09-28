@@ -48,27 +48,27 @@
 
   <screenshots>
     <screenshot type="default">
-      <image>https://github.com/Steve-Tech/YAFI/blob/main/docs/1-thermals.png</image>
+      <image>https://raw.githubusercontent.com/Steve-Tech/YAFI/refs/heads/main/docs/1-thermals.png</image>
       <caption>Fan Control and Temperature Monitoring</caption>
     </screenshot>
     <screenshot>
-      <image>https://github.com/Steve-Tech/YAFI/blob/main/docs/2-leds.png</image>
+      <image>https://raw.githubusercontent.com/Steve-Tech/YAFI/refs/heads/main/docs/2-leds.png</image>
       <caption>LED Control</caption>
     </screenshot>
     <screenshot>
-      <image>https://github.com/Steve-Tech/YAFI/blob/main/docs/3-battery.png</image>
+      <image>https://raw.githubusercontent.com/Steve-Tech/YAFI/refs/heads/main/docs/3-battery.png</image>
       <caption>Battery Statistics</caption>
     </screenshot>
     <screenshot>
-      <image>https://github.com/Steve-Tech/YAFI/blob/main/docs/4-battery-limit.png</image>
+      <image>https://raw.githubusercontent.com/Steve-Tech/YAFI/refs/heads/main/docs/4-battery-limit.png</image>
       <caption>Battery Limiting</caption>
     </screenshot>
     <screenshot>
-      <image>https://github.com/Steve-Tech/YAFI/blob/main/docs/4a-battery-ext.png</image>
+      <image>https://raw.githubusercontent.com/Steve-Tech/YAFI/refs/heads/main/docs/4a-battery-ext.png</image>
       <caption>Battery Extender</caption>
     </screenshot>
     <screenshot>
-      <image>https://github.com/Steve-Tech/YAFI/blob/main/docs/5-hardware.png</image>
+      <image>https://raw.githubusercontent.com/Steve-Tech/YAFI/refs/heads/main/docs/5-hardware.png</image>
       <caption>Hardware Info</caption>
     </screenshot>
   </screenshots>
