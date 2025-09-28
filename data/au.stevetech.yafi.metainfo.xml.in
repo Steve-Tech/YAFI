@@ -74,6 +74,18 @@
   </screenshots>
 
   <releases>
+    <release version="0.6" date="2025-09-28">
+      <url type="details">https://github.com/Steve-Tech/YAFI/releases/tag/0.6</url>
+      <description>
+        <p>The following changes have been made:</p>
+        <ul>
+          <li>YAFI now has a new logo!</li>
+          <li>The advanced LED settings now detect available LEDs.</li>
+          <li>The ALS and lid open sensor has been added.</li>
+          <li>Stuttering has been reduced when opening the about dialog.</li>
+        </ul>
+      </description>
+    </release>
     <release version="0.5" date="2025-09-16">
       <url type="details">https://github.com/Steve-Tech/YAFI/releases/tag/0.5</url>
       <description>

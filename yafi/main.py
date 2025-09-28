@@ -142,7 +142,7 @@ class YafiApplication(Adw.Application):
             developers=["Stephen Horvath https://github.com/Steve-Tech"],
             issue_url="https://github.com/Steve-Tech/YAFI/issues",
             license_type=Gtk.License.GPL_2_0,
-            version="0.5",
+            version="0.6",
             website="https://github.com/Steve-Tech/YAFI",
         )
         about.add_acknowledgement_section(None, ["Framework Computer Inc. https://frame.work/"])
