@@ -136,7 +136,7 @@ class YafiApplication(Adw.Application):
             application_icon="au.stevetech.yafi",
             application_name="Yet Another Framework Interface",
             comments="YAFI is another GUI for the Framework Laptop Embedded Controller.\n"
-            + "It is written in Python with a GTK3 theme, and uses the `CrOS_EC_Python` library to communicate with the EC.",
+            + "It is written in Python with a GTK4 theme, and uses the `CrOS_EC_Python` library to communicate with the EC.",
             copyright="© 2025 Stephen Horvath",
             developer_name="Stephen Horvath",
             developers=["Stephen Horvath https://github.com/Steve-Tech"],
