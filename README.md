@@ -92,3 +92,9 @@ This error occurs when `/dev/cros_ec` is not found, and the `CrOS_EC_Python` lib
 You can either update your kernel to have a working `cros_ec_dev` driver, or run YAFI as root.
 
 It can also occur if you do not have a CrOS EC, like on non Framework laptops.
+
+## Disclaimer
+
+YAFI is not affiliated with Framework Computer Inc. in any way.
+
+YAFI is licensed under the [GPL-2.0-or-later license](COPYING), and comes with no warranty or guarantee of any kind. Use at your own risk.

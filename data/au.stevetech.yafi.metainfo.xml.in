@@ -7,7 +7,19 @@
   <name>Yet Another Framework Interface</name>
   <summary>YAFI is another GUI for the Framework Laptop Embedded Controller</summary>
   <description>
-    <p>It is written in Python with a GTK4 Adwaita theme, and uses the `CrOS_EC_Python` library to communicate with the EC.</p>
+    <p>It is written in Python with a GTK4 Adwaita theme, and uses the CrOS_EC_Python library to communicate with the EC.</p>
+    <p>YAFI has the capability for the following features:</p>
+    <ul>
+      <li>Fan control and temperature monitoring</li>
+      <li>LED control</li>
+      <li>Battery statistics</li>
+      <li>Battery limiting</li>
+      <li>Hardware information</li>
+    </ul>
+
+    <p>You will need to install the udev rules to allow non-root access to the EC device. See the README for more information.</p>
+
+    <p>YAFI is not affiliated with Framework Computer Inc. in any way.</p>
   </description>
 
   <developer id="au.stevetech">
