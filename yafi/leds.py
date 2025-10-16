@@ -48,11 +48,19 @@ class LedsPage(Gtk.Box):
                 ec_commands.framework_laptop.set_fp_led_level(app.cros_ec, value)
                 self.led_pwr.set_subtitle(["High", "Medium", "Low"][value])
 
-            current_fp_level = ec_commands.framework_laptop.get_fp_led_level(
-                app.cros_ec
-            ).value
-            self.led_pwr_scale.set_value(abs(current_fp_level - 2))
-            self.led_pwr.set_subtitle(["High", "Medium", "Low"][current_fp_level])
+            try:
+                current_fp_level = ec_commands.framework_laptop.get_fp_led_level(
+                    app.cros_ec
+                ).value
+                self.led_pwr_scale.set_value(abs(current_fp_level - 2))
+                self.led_pwr.set_subtitle(["High", "Medium", "Low"][current_fp_level])
+            except ValueError:
+                # LED isn't a normal value
+                current_fp_level = ec_commands.framework_laptop.get_fp_led_level_int(
+                    app.cros_ec
+                )
+                self.led_pwr.set_subtitle(f"Custom ({current_fp_level}%)")
+
             self.led_pwr_scale.connect("value-changed", handle_led_pwr)
         except ec_exceptions.ECError as e:
             if e.ec_status == ec_exceptions.EcStatus.EC_RES_INVALID_COMMAND:
