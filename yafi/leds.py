@@ -118,6 +118,9 @@ class LedsPage(Gtk.Box):
                         continue
                     else:
                         raise e
+            
+            # Power LED does not support Blue, even though Intel models think they do
+            leds[ec_commands.leds.EcLedId.EC_LED_ID_POWER_LED][2] = 0
 
             def handle_led_colour(combobox, led_id):
                 colour = combobox.get_selected() - 2
