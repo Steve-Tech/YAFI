@@ -28,9 +28,11 @@ class LedsPage(Gtk.Box):
     __gtype_name__ = 'LedsPage'
 
     first_run = True
+    fp_led_version = 1
 
     led_pwr = Gtk.Template.Child()
     led_pwr_scale = Gtk.Template.Child()
+    led_pwr_scale_adj = Gtk.Template.Child()
 
     led_kbd = Gtk.Template.Child()
     led_kbd_scale = Gtk.Template.Child()
@@ -42,24 +44,60 @@ class LedsPage(Gtk.Box):
 
     def setup(self, app):
         # Power LED
+        fp_led_level_text = ["High", "Medium", "Low", "Ultra Low"]
         try:
             def handle_led_pwr(scale):
-                value = int(abs(scale.get_value() - 2))
-                ec_commands.framework_laptop.set_fp_led_level(app.cros_ec, value)
-                self.led_pwr.set_subtitle(["High", "Medium", "Low"][value])
+                match self.fp_led_version:
+                    case 0:
+                        value = int(abs(scale.get_value() - 2))
+                        ec_commands.framework_laptop.set_fp_led_level(
+                            app.cros_ec, value
+                        )
+                        self.led_pwr.set_subtitle(fp_led_level_text[value])
+                    case 1:
+                        value = int(scale.get_value())
+                        ec_commands.framework_laptop.set_fp_led_percent(
+                            app.cros_ec, value
+                        )
+                        self.led_pwr.set_subtitle(f"{value}%")
 
-            try:
+            if self.fp_led_version == 1:
+                try:
+                    current_fp_levels = (
+                        ec_commands.framework_laptop.get_fp_led_levels_v1(
+                            app.cros_ec
+                        ).value
+                    )
+                    self.led_pwr_scale.set_value(current_fp_levels["percentage"])
+                    if current_fp_levels["level"] < len(fp_led_level_text):
+                        self.led_pwr.set_subtitle(
+                            f"{fp_led_level_text[current_fp_levels['level']]} ({current_fp_levels['percentage']}%)"
+                        )
+                    else:
+                        self.led_pwr.set_subtitle(f"{current_fp_levels['percentage']}%")
+
+                except ec_exceptions.ECError as e:
+                    if e.ec_status == ec_exceptions.EcStatus.EC_RES_INVALID_VERSION:
+                        self.fp_led_version = 0
+                    else:
+                        raise e
+
+            if self.fp_led_version == 0:
                 current_fp_level = ec_commands.framework_laptop.get_fp_led_level(
                     app.cros_ec
                 ).value
-                self.led_pwr_scale.set_value(abs(current_fp_level - 2))
-                self.led_pwr.set_subtitle(["High", "Medium", "Low"][current_fp_level])
-            except ValueError:
-                # LED isn't a normal value
-                current_fp_level = ec_commands.framework_laptop.get_fp_led_level_int(
-                    app.cros_ec
-                )
-                self.led_pwr.set_subtitle(f"Custom ({current_fp_level}%)")
+                if current_fp_level < len(fp_led_level_text):
+                    self.led_pwr_scale_adj.set_upper(2)
+                    self.led_pwr_scale.set_value(abs(current_fp_level - 2))
+                    self.led_pwr.set_subtitle(f"{fp_led_level_text[current_fp_level]}")
+                else:
+                    # Disable if an unsupported level is set
+                    self.led_pwr_scale.set_sensitive(False)
+                    current_fp_percent = (
+                        ec_commands.framework_laptop.get_fp_led_percent(app.cros_ec)
+                    )
+                    self.led_pwr_scale.set_value(current_fp_percent)
+                    self.led_pwr.set_subtitle(f"Custom {current_fp_percent}%")
 
             self.led_pwr_scale.connect("value-changed", handle_led_pwr)
         except ec_exceptions.ECError as e:
