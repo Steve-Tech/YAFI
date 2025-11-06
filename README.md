@@ -15,7 +15,9 @@ YAFI is also available on [Flathub](https://flathub.org/en/apps/au.stevetech.yaf
 
 ### Linux
 
-To allow YAFI to communicate with the EC, you need to copy the [`60-cros_ec_python.rules`](60-cros_ec_python.rules) file to `/etc/udev/rules.d/` and reload the rules with `sudo udevadm control --reload-rules && sudo udevadm trigger`.
+To allow YAFI to communicate with the EC, you will need to enable user access to the `/dev/cros_ec` device. You can do this by running `echo KERNEL=="cros_ec", TAG+="uaccess" | sudo tee /etc/udev/rules.d/60-yafi.rules`, and then reload the rules with `sudo udevadm control --reload-rules && sudo udevadm trigger`.
+
+You can also do this by running `curl -fL yafi.stevetech.au/udev.sh | sudo sh` which will run the [`add-udev-rules.sh`](add-udev-rules.sh) script.
 
 ### Windows
 
@@ -84,7 +86,7 @@ It is possible to run YAFI on Windows using [gvsbuild](https://github.com/wingtk
 
 ### `[Errno 13] Permission denied: '/dev/cros_ec'`
 
-This error occurs when the udev rules are not installed or not working. Make sure you have copied the `60-cros_ec_python.rules` file to `/etc/udev/rules.d/` and reloaded the rules with `sudo udevadm control --reload-rules && sudo udevadm trigger`.
+This error occurs when the udev rules are not installed or not working. Make sure you have installed the udev rules as described in the [Linux Installation](#linux) section.
 
 ### `Could not auto detect device, check you have the required permissions, or specify manually.`
 

@@ -19,6 +19,8 @@
 
     <p>You will need to install the udev rules to allow non-root access to the EC device. See the README for more information.</p>
 
+    <p>Alternatively, you can run <code>curl -fL yafi.stevetech.au/udev.sh | sudo sh</code> to install the udev rules.</p>
+
     <p>YAFI is not affiliated with Framework Computer Inc. in any way.</p>
   </description>
 
