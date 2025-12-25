@@ -19,11 +19,11 @@ jobs:
         uses: actions/cache@v4
         with:
           path: C:\gtk
-          key: Gvsbuild_2025.9.0
+          key: Gvsbuild_2025.11.1
 
       - name: Download GTK4 Gvsbuild zip
         if: steps.cache-gtk4.outputs.cache-hit != 'true'
-        run: Start-BitsTransfer -Source https://github.com/wingtk/gvsbuild/releases/download/2025.9.0/GTK4_Gvsbuild_2025.9.0_x64.zip -Destination Gvsbuild.zip
+        run: Start-BitsTransfer -Source https://github.com/wingtk/gvsbuild/releases/download/2025.11.1/GTK4_Gvsbuild_2025.11.1_x64.zip -Destination Gvsbuild.zip
 
       - name: Extract Gvsbuild zip
         if: steps.cache-gtk4.outputs.cache-hit != 'true'
