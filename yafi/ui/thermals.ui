@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<!-- Created with Cambalache 0.96.1 -->
+<!-- Created with Cambalache 0.96.3 -->
 <interface>
   <!-- interface-name thermals.ui -->
   <!-- interface-description The Thermals page for YAFI -->
@@ -90,6 +90,12 @@
                     </property>
                     <property name="title">Fan RPM Target</property>
                     <property name="visible">False</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="AdwExpanderRow" id="fan_set_points">
+                    <property name="selectable">False</property>
+                    <property name="title">Fan Set Points</property>
                   </object>
                 </child>
                 <style>
