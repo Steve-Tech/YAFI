@@ -19,7 +19,7 @@
 
     <p>You will need to install the udev rules to allow non-root access to the EC device. See the README for more information.</p>
 
-    <p>Alternatively, you can run <code>curl -fL yafi.stevetech.au/udev.sh | sudo sh</code> to install the udev rules.</p>
+    <p>Alternatively, you can run <code>curl -Lfs yafi.stevetech.au/udev.sh | sudo sh</code> to install the udev rules.</p>
 
     <p>YAFI is not affiliated with Framework Computer Inc. in any way.</p>
   </description>
@@ -88,6 +88,12 @@
   </screenshots>
 
   <releases>
+    <release version="0.7" date="2025-12-25">
+      <url type="details">https://github.com/Steve-Tech/YAFI/releases/tag/0.7</url>
+      <description>
+        <p>YAFI now supports modifying fan set points.</p>
+      </description>
+    </release>
     <release version="0.6" date="2025-09-28">
       <url type="details">https://github.com/Steve-Tech/YAFI/releases/tag/0.6</url>
       <description>
