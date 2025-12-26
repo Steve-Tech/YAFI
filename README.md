@@ -15,7 +15,7 @@ YAFI is also available on [Flathub](https://flathub.org/en/apps/au.stevetech.yaf
 
 ### Linux
 
-To allow YAFI to communicate with the EC, you will need to enable user access to the `/dev/cros_ec` device. You can do this by running `echo KERNEL=="cros_ec", TAG+="uaccess" | sudo tee /etc/udev/rules.d/60-yafi.rules`, and then reload the rules with `sudo udevadm control --reload-rules && sudo udevadm trigger`.
+To allow YAFI to communicate with the EC, you will need to enable user access to the `/dev/cros_ec` device. You can do this by running `echo KERNEL==\"cros_ec\", TAG+=\"uaccess\" | sudo tee /etc/udev/rules.d/60-yafi.rules`, and then reload the rules with `sudo udevadm control --reload-rules && sudo udevadm trigger`.
 
 You can also do this by running `curl -Lfs yafi.stevetech.au/udev.sh | sudo sh` which will run the [`add-udev-rules.sh`](add-udev-rules.sh) script.
 
