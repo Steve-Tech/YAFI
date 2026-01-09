@@ -141,6 +141,7 @@ class YafiApplication(Adw.Application):
             copyright="© 2025 Stephen Horvath",
             developer_name="Stephen Horvath",
             developers=["Stephen Horvath https://github.com/Steve-Tech"],
+            artists=["Mirabelle SALLES https://github.com/oiimrosabel"],
             issue_url="https://github.com/Steve-Tech/YAFI/issues",
             license_type=Gtk.License.GPL_2_0,
             version="0.7",
