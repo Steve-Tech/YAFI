@@ -34,8 +34,6 @@ class BatteryLimiterPage(Gtk.Box):
     bat_limit = Gtk.Template.Child()
     bat_limit_label = Gtk.Template.Child()
     bat_limit_scale = Gtk.Template.Child()
-    chg_limit_override = Gtk.Template.Child()
-    chg_limit_override_btn = Gtk.Template.Child()
 
     bat_ext_group = Gtk.Template.Child()
     bat_ext_enable = Gtk.Template.Child()
@@ -61,7 +59,6 @@ class BatteryLimiterPage(Gtk.Box):
                 self.bat_limit_label.set_label(f"{ec_limit[1]}%")
                 self.chg_limit.set_sensitive(True)
                 self.bat_limit.set_sensitive(True)
-                self.chg_limit_override.set_sensitive(True)
 
             def handle_chg_limit_change(min, max):
                 ec_commands.framework_laptop.set_charge_limit(
@@ -79,7 +76,6 @@ class BatteryLimiterPage(Gtk.Box):
 
                 self.chg_limit.set_sensitive(active)
                 self.bat_limit.set_sensitive(active)
-                self.chg_limit_override.set_sensitive(active)
 
             self.chg_limit_enable.connect(
                 "notify::active", lambda switch, _: handle_chg_limit_enable(switch)
@@ -97,12 +93,6 @@ class BatteryLimiterPage(Gtk.Box):
                 ),
             )
 
-            self.chg_limit_override_btn.connect(
-                "clicked",
-                lambda _: ec_commands.framework_laptop.override_charge_limit(
-                    app.cros_ec
-                ),
-            )
         except ec_exceptions.ECError as e:
             if e.ec_status == ec_exceptions.EcStatus.EC_RES_INVALID_COMMAND:
                 app.no_support.append(ec_commands.framework_laptop.EC_CMD_CHARGE_LIMIT_CONTROL)

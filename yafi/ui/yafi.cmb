@@ -5,7 +5,7 @@
   <ui template-class="YafiWindow" filename="yafi.ui" sha256="9d1b2f030e4a816eb0b1aa53ae1d80c5b50a2f4646e32c7a64803eb6f6ed3947"/>
   <ui template-class="ThermalsPage" filename="thermals.ui" sha256="89f5b68da04abad587d8b949d18357cd956313680e663b10e5d42697f9bfbf6e"/>
   <ui template-class="LedsPage" filename="leds.ui" sha256="abc3ee759974a5c92feb48cc258dbe7271d0402facf71fd5e779f2bb1a277e16"/>
-  <ui template-class="BatteryLimiterPage" filename="battery-limiter.ui" sha256="b5d41b19cb1fb7ca5b4bcfae43244e54111f5e8d8c51d95448d6a92b5185d2c4"/>
+  <ui template-class="BatteryLimiterPage" filename="battery-limiter.ui" sha256="3a50b0dea08b9acbaa389d7d7a38bd94970fdc79207ef10638f722f52d9425cd"/>
   <ui template-class="HardwarePage" filename="hardware.ui" sha256="37ea282198d9f60435f80e4adf8256cd2249e590dcad4b63af634d828673f1bf"/>
   <ui template-class="BatteryPage" filename="battery.ui" sha256="d495280cb543a26cdee1c2939e5af980d8d3878c326e360eeab4f05195cdbdc9"/>
 </cambalache-project>
