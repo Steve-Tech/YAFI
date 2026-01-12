@@ -121,6 +121,7 @@ class YafiApplication(Adw.Application):
                 self.current_page = page
                 self.change_page(self.win.content, pages[page][1])
             else:
+                self.win.navbar.select_row(self.win.navbar.get_row_at_index(self.current_page))
                 self.on_about_action()
 
         self.win.navbar.connect("row-activated", lambda box, row: switch_page(row.get_index()))
