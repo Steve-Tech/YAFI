@@ -64,7 +64,7 @@ class ThermalsPage(Gtk.Box):
                 raise e
 
         for key, value in ec_temp_sensors.items():
-            off_row = Adw.ActionRow(title=key, subtitle=f"{value[0]}°C")
+            off_row = Adw.ActionRow(title=key, subtitle=f"{value[0]}°C" if value[0] is not None else "Error")
             off_row.add_css_class("property")
             self.temperatures.append(off_row)
             self.temp_items.append(off_row)
@@ -205,7 +205,7 @@ class ThermalsPage(Gtk.Box):
         ec_temp_sensors = ec_commands.memmap.get_temps(app.cros_ec)
         # The temp sensors disappear sometimes, so we need to handle that
         for i in range(min(len(self.temp_items), len(ec_temp_sensors))):
-            self.temp_items[i].set_subtitle(f"{ec_temp_sensors[i]}°C")
+            self.temp_items[i].set_subtitle(f"{ec_temp_sensors[i]}°C" if ec_temp_sensors[i] is not None else "Error")
 
         # Check if this has already failed and skip if it has
         if not ec_commands.pwm.EC_CMD_PWM_GET_FAN_TARGET_RPM in app.no_support:
