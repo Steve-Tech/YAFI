@@ -50,6 +50,9 @@ class BatteryPage(Gtk.Box):
 
     def setup(self, app):
         battery = ec_commands.memmap.get_battery_values(app.cros_ec)
+        if not battery:
+            self.batt_status.set_subtitle("No data")
+            return
         self.batt_manu.set_subtitle(battery["manufacturer"])
         self.batt_model.set_subtitle(battery["model"])
         self.batt_serial.set_subtitle(battery["serial"])
